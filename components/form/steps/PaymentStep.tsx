@@ -1,0 +1,463 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Elements,
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { useFormContext } from "../FormProvider";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
+import { Clock, AlertTriangle } from "lucide-react";
+
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
+
+// ── Countdown Timer ─────────────────────────────────────────────────
+
+function ReservationTimer({
+  expiresAt,
+  onExpired,
+}: {
+  expiresAt: string;
+  onExpired: () => void;
+}) {
+  const [secondsLeft, setSecondsLeft] = useState(() => {
+    const diff = new Date(expiresAt).getTime() - Date.now();
+    return Math.max(0, Math.floor(diff / 1000));
+  });
+
+  useEffect(() => {
+    if (secondsLeft <= 0) {
+      onExpired();
+      return;
+    }
+
+    const timer = setInterval(() => {
+      const diff = new Date(expiresAt).getTime() - Date.now();
+      const remaining = Math.max(0, Math.floor(diff / 1000));
+      setSecondsLeft(remaining);
+      if (remaining <= 0) {
+        onExpired();
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [expiresAt, onExpired, secondsLeft]);
+
+  const minutes = Math.floor(secondsLeft / 60);
+  const seconds = secondsLeft % 60;
+  const isUrgent = secondsLeft <= 120;
+  const isCritical = secondsLeft <= 60;
+
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-2 rounded-lg border px-4 py-3 text-sm font-medium transition-colors",
+        isCritical
+          ? "border-red-300 bg-red-50 text-red-700"
+          : isUrgent
+            ? "border-orange-300 bg-orange-50 text-orange-700"
+            : "border-[#2CBCB0]/30 bg-[#2CBCB0]/5 text-[#1a1a2e]"
+      )}
+    >
+      {isCritical ? (
+        <AlertTriangle className="h-4 w-4 shrink-0" />
+      ) : (
+        <Clock className="h-4 w-4 shrink-0" />
+      )}
+      <span>
+        Your slot is reserved for{" "}
+        <span className="font-bold tabular-nums">
+          {minutes}:{seconds.toString().padStart(2, "0")}
+        </span>
+      </span>
+      {isCritical && (
+        <span className="ml-auto text-xs">Complete payment now!</span>
+      )}
+    </div>
+  );
+}
+
+// ── Expired overlay ─────────────────────────────────────────────────
+
+function ReservationExpired({ onGoBack }: { onGoBack: () => void }) {
+  return (
+    <div className="rounded-lg border-2 border-red-200 bg-red-50 p-6 text-center space-y-4">
+      <AlertTriangle className="h-10 w-10 text-red-500 mx-auto" />
+      <h3 className="text-lg font-semibold text-red-800">
+        Your reservation has expired
+      </h3>
+      <p className="text-sm text-red-700">
+        The 10-minute hold on your selected date has expired. The slot has been
+        released and may no longer be available. Please go back and select a new
+        date.
+      </p>
+      <Button onClick={onGoBack} className="bg-red-600 hover:bg-red-700">
+        Choose Another Date
+      </Button>
+    </div>
+  );
+}
+
+// ── Booking summary ─────────────────────────────────────────────────
+
+function BookingSummary() {
+  const { formData } = useFormContext();
+
+  const formatDate = (iso: string) => {
+    if (!iso) return "";
+    return new Date(iso).toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
+  return (
+    <Card className="mb-6">
+      <CardHeader>
+        <CardTitle className="text-lg">Booking Summary</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2 text-sm">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+          <span className="text-gray-500">Property type:</span>
+          <span>
+            {formData.propertyType}
+            {formData.propertySubtype && ` – ${formData.propertySubtype}`}
+          </span>
+          <span className="text-gray-500">Address:</span>
+          <span>
+            {formData.addressLine1}
+            {formData.city && `, ${formData.city}`}
+            {formData.postcode && ` ${formData.postcode}`}
+          </span>
+          <span className="text-gray-500">Bedrooms:</span>
+          <span>{formData.bedrooms ?? "—"}</span>
+          <span className="text-gray-500">Date:</span>
+          <span>{formatDate(formData.bookingDate)}</span>
+          <span className="text-gray-500">Name:</span>
+          <span>{formData.fullName}</span>
+          <span className="text-gray-500">Email:</span>
+          <span>{formData.email}</span>
+          <span className="text-gray-500">Deposit:</span>
+          <span className="font-semibold">£60.00</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ── Checkout form (inside Stripe Elements) ──────────────────────────
+
+function CheckoutForm() {
+  const router = useRouter();
+  const stripe = useStripe();
+  const elements = useElements();
+  const {
+    formData,
+    updateFormData,
+    goBack,
+    isSubmitting,
+    setIsSubmitting,
+    reservationToken,
+    reservationExpiresAt,
+    setReservationToken,
+    setReservationExpiresAt,
+  } = useFormContext();
+
+  const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [expired, setExpired] = useState(false);
+  const [showBackWarning, setShowBackWarning] = useState(false);
+
+  useEffect(() => {
+    if (reservationExpiresAt) {
+      const diff = new Date(reservationExpiresAt).getTime() - Date.now();
+      if (diff <= 0) setExpired(true);
+    }
+  }, [reservationExpiresAt]);
+
+  const handleExpired = useCallback(() => {
+    setExpired(true);
+    setReservationToken(null);
+    setReservationExpiresAt(null);
+  }, [setReservationToken, setReservationExpiresAt]);
+
+  const handleGoBackToCalendar = () => {
+    releaseReservationAndGoBack();
+  };
+
+  const releaseReservationAndGoBack = () => {
+    if (reservationToken) {
+      fetch("/api/reservations/release", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionToken: reservationToken }),
+      }).catch(() => {});
+    }
+    setReservationToken(null);
+    setReservationExpiresAt(null);
+    goBack();
+  };
+
+  const handleBackClick = () => {
+    if (reservationToken && !expired) {
+      setShowBackWarning(true);
+    } else {
+      goBack();
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!stripe || !elements || !agreeToTerms || expired) return;
+
+    setErrorMessage(null);
+    setIsSubmitting(true);
+
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.href,
+        },
+        redirect: "if_required",
+      });
+
+      if (error) {
+        setErrorMessage(error.message || "Payment failed. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (paymentIntent && paymentIntent.status === "succeeded") {
+        const { bookingReference: _unused, ...submitData } = formData;
+        const res = await fetch("/api/bookings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...submitData,
+            stripePaymentIntentId: paymentIntent.id,
+            depositPaid: true,
+            reservationToken,
+          }),
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          if (errData.code === "DATE_FULLY_BOOKED") {
+            setErrorMessage(
+              errData.message ||
+                "This date is now fully booked. Please go back and choose another date."
+            );
+            setIsSubmitting(false);
+            return;
+          }
+          throw new Error(errData.message || "Failed to save booking");
+        }
+
+        const data = await res.json();
+        const ref = data?.bookingReference ?? formData.bookingReference;
+        updateFormData({ bookingReference: ref });
+        router.push(`/thank-you?ref=${encodeURIComponent(ref)}`);
+      } else {
+        setErrorMessage("Payment was not completed. Please try again.");
+        setIsSubmitting(false);
+      }
+    } catch (err) {
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again."
+      );
+      setIsSubmitting(false);
+    }
+  };
+
+  if (expired) {
+    return <ReservationExpired onGoBack={handleGoBackToCalendar} />;
+  }
+
+  return (
+    <div className="space-y-6">
+      {showBackWarning && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-sm mx-4 p-6 space-y-4">
+            <div className="flex gap-3">
+              <AlertTriangle className="h-6 w-6 text-orange-500 shrink-0 mt-0.5" />
+              <div className="space-y-2">
+                <h3 className="font-semibold text-[#1a1a2e]">
+                  Leave payment?
+                </h3>
+                <p className="text-sm text-gray-600">
+                  Your 10-minute slot reservation will be cancelled and the date
+                  may become unavailable. Are you sure you want to go back?
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setShowBackWarning(false)}
+                className="text-sm"
+              >
+                Stay & Pay
+              </Button>
+              <Button
+                onClick={releaseReservationAndGoBack}
+                className="bg-orange-600 hover:bg-orange-700 text-sm"
+              >
+                Go Back
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {reservationExpiresAt && (
+        <ReservationTimer
+          expiresAt={reservationExpiresAt}
+          onExpired={handleExpired}
+        />
+      )}
+
+      <Card className={cn("border-2 border-[#2CBCB0]")}>
+        <CardHeader>
+          <CardTitle className="text-lg">Payment – £60.00 Deposit</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <PaymentElement
+            options={{
+              layout: "tabs",
+            }}
+          />
+
+          <div className="flex items-center gap-2 pt-2">
+            <Checkbox
+              id="agreeToTerms"
+              checked={agreeToTerms}
+              onCheckedChange={(checked) => setAgreeToTerms(!!checked)}
+            />
+            <label
+              htmlFor="agreeToTerms"
+              className="text-sm font-medium leading-none cursor-pointer"
+            >
+              I agree to the terms and conditions
+            </label>
+          </div>
+        </CardContent>
+      </Card>
+
+      {errorMessage && (
+        <p className="text-sm text-red-500">{errorMessage}</p>
+      )}
+
+      <div className="flex gap-4 pt-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleBackClick}
+          disabled={isSubmitting}
+        >
+          Back
+        </Button>
+        <Button
+          onClick={handleSubmit}
+          disabled={!stripe || !elements || !agreeToTerms || isSubmitting}
+        >
+          {isSubmitting ? "Processing..." : "Pay £60.00 & Confirm Booking"}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ── Payment step wrapper ────────────────────────────────────────────
+
+export function PaymentStep() {
+  const { formData } = useFormContext();
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const createIntent = useCallback(async () => {
+    try {
+      const res = await fetch("/api/stripe/create-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to initialise payment");
+      }
+
+      const data = await res.json();
+      setClientSecret(data.clientSecret);
+    } catch (err) {
+      setLoadError(
+        err instanceof Error ? err.message : "Failed to load payment form"
+      );
+    }
+  }, [formData.fullName, formData.email]);
+
+  useEffect(() => {
+    createIntent();
+  }, [createIntent]);
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+        Confirm your booking
+      </h2>
+
+      <BookingSummary />
+
+      {loadError && (
+        <p className="text-sm text-red-500">{loadError}</p>
+      )}
+
+      {!clientSecret && !loadError && (
+        <div className="flex justify-center py-8">
+          <div className="animate-pulse text-gray-400">
+            Loading payment form...
+          </div>
+        </div>
+      )}
+
+      {clientSecret && (
+        <Elements
+          stripe={stripePromise}
+          options={{
+            clientSecret,
+            appearance: {
+              theme: "stripe",
+              variables: {
+                colorPrimary: "#2CBCB0",
+                borderRadius: "6px",
+              },
+            },
+          }}
+        >
+          <CheckoutForm />
+        </Elements>
+      )}
+    </div>
+  );
+}
