@@ -9,8 +9,15 @@ const RESERVATION_MINUTES = 10;
 
 export async function POST(request: Request) {
   try {
+    console.log("[reservations] ENV check:", {
+      hasDATABASE_URL: !!process.env.DATABASE_URL,
+      hasPOSTGRES_URL: !!process.env.POSTGRES_URL,
+      hasSTORAGE_URL: !!process.env.STORAGE_URL,
+    });
+
     const body = await request.json();
     const { bookingDate, existingToken } = body;
+    console.log("[reservations] Request body:", { bookingDate, existingToken });
 
     if (!bookingDate) {
       return NextResponse.json(
@@ -21,6 +28,7 @@ export async function POST(request: Request) {
 
     const dateOnly = new Date(bookingDate).toISOString().split("T")[0];
     const now = new Date();
+    console.log("[reservations] Parsed date:", dateOnly);
 
     // Clean up expired reservations for this date
     await db
@@ -80,9 +88,12 @@ export async function POST(request: Request) {
       reservationMinutes: RESERVATION_MINUTES,
     });
   } catch (error) {
-    console.error("Reservation error:", error);
+    console.error("[reservations] FULL ERROR:", error);
+    console.error("[reservations] Error name:", (error as Error)?.name);
+    console.error("[reservations] Error message:", (error as Error)?.message);
+    console.error("[reservations] Error stack:", (error as Error)?.stack);
     return NextResponse.json(
-      { message: "Failed to reserve slot" },
+      { message: "Failed to reserve slot", debug: (error as Error)?.message },
       { status: 500 }
     );
   }
