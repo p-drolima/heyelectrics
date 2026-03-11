@@ -139,7 +139,7 @@ export function AddressFinderStep() {
   if (phase === "postcode") {
     return (
       <div className="space-y-8">
-        <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+        <h2 className="text-2xl font-semibold text-black">
           Find your address
         </h2>
 
@@ -181,7 +181,7 @@ export function AddressFinderStep() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-      <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+      <h2 className="text-2xl font-semibold text-black">
         Select your address
       </h2>
 
@@ -193,7 +193,7 @@ export function AddressFinderStep() {
           <button
             type="button"
             onClick={handleChangePostcode}
-            className="text-sm text-[#2CBCB0] hover:underline"
+            className="text-sm text-[#44B4D7] hover:underline"
           >
             Change
           </button>

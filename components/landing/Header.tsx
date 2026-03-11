@@ -1,41 +1,44 @@
 "use client";
 
 import Link from "next/link";
-import { Phone } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
+    <header className="w-full bg-white">
       <div
         className={cn(
           "flex items-center justify-between",
-          "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3"
+          "max-w-[1375px] mx-auto px-4 sm:px-6 lg:px-0 py-[42px]"
         )}
       >
-        <Link href="/" className="flex items-center">
-          <span
-            className={cn(
-              "inline-flex items-center justify-center",
-              "rounded-full px-4 py-1.5 text-sm font-bold text-white",
-              "bg-[#1a1a2e]"
-            )}
-          >
-            HEY
+        <div className="flex items-center">
+          <Link href="/" className="flex items-center shrink-0">
+            <Image
+              src="/images/hey-logo.svg"
+              alt="HEY"
+              width={152}
+              height={51}
+              priority
+            />
+          </Link>
+          <span className="hidden md:block text-[21px] font-medium leading-[107%] text-black font-[family-name:var(--font-nav)] ml-[clamp(2rem,9.4vw,129px)]">
+            Heating, plumbing,<br />electrics. Sorted.
           </span>
-        </Link>
+        </div>
 
-        <a
-          href="tel:01457868040"
-          className={cn(
-            "flex items-center gap-2",
-            "text-[#1a1a2e] font-medium hover:text-[#2CBCB0]",
-            "transition-colors"
-          )}
-        >
-          <Phone className="h-4 w-4" />
-          <span className="hidden sm:inline">01457 868 040</span>
-        </a>
+        <div className="flex flex-col items-start">
+          <span className="text-[18px] leading-[102%] tracking-[-0.02em] text-black font-medium font-[family-name:var(--font-nav)]">
+            Got a problem?
+          </span>
+          <a
+            href="tel:01457868040"
+            className="text-[24px] leading-[102%] tracking-[-0.02em] text-black font-medium font-[family-name:var(--font-nav)] hover:opacity-70 transition-opacity"
+          >
+            01457 868 040
+          </a>
+        </div>
       </div>
     </header>
   );

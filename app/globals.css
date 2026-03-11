@@ -1,27 +1,115 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "GT Eesti Display";
+  src: url("/fonts/GT-Eesti-Display-Regular-Trial.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GT Eesti Display";
+  src: url("/fonts/GT-Eesti-Display-Medium-Trial.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GT Eesti Display";
+  src: url("/fonts/GT-Eesti-Display-Bold-Trial.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GT Eesti Display";
+  src: url("/fonts/GT-Eesti-Display-UltraBold-Trial.woff") format("woff");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GT Eesti Text";
+  src: url("/fonts/GT-Eesti-Text-Regular-Trial.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GT Eesti Text";
+  src: url("/fonts/GT-Eesti-Text-Medium-Trial.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GT Eesti Text";
+  src: url("/fonts/GT-Eesti-Text-Bold-Trial.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GT Eesti Text";
+  src: url("/fonts/GT-Eesti-Text-Light-Trial.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Display";
+  src: url("/fonts/NeueHaasDisplay-Mediu.woff2") format("woff2"),
+       url("/fonts/NeueHaasDisplay-Mediu.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
-  --foreground: #1a1a2e;
-  --primary: #2CBCB0;
-  --primary-dark: #249e94;
-  --secondary: #1a1a2e;
-  --accent: #F97316;
-  --muted: #f5f5f5;
+  --foreground: #000000;
+  --primary: #000000;
+  --primary-light: #333333;
+  --secondary: #FFEA60;
+  --accent: #F12727;
+  --muted: #F4F6FA;
+  --muted-text: #848484;
   --border: #e5e7eb;
+
+  --font-display: "GT Eesti Display", system-ui, -apple-system, sans-serif;
+  --font-text: "GT Eesti Text", system-ui, -apple-system, sans-serif;
+  --font-nav: "Neue Haas Grotesk Display", system-ui, -apple-system, sans-serif;
+
+  --accent-blue: #44B4D7;
+  --accent-blue-dark: #3a9cbc;
+
+  --plan-blue: #44B4D7;
+  --plan-green: #65ED65;
+  --plan-red: #F12727;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
-  --color-primary-dark: var(--primary-dark);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-blue-dark: var(--accent-blue-dark);
   --color-muted: var(--muted);
+  --color-muted-text: var(--muted-text);
   --color-border: var(--border);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  --font-text: var(--font-text);
+  --font-nav: var(--font-nav);
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -48,7 +136,13 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
 }
 
 html {

@@ -59,7 +59,7 @@ export function CommercialEnquiryStep() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-      <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+      <h2 className="text-2xl font-semibold text-black">
         Commercial enquiry
       </h2>
 

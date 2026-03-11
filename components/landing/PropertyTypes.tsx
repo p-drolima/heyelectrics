@@ -1,11 +1,5 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 const PROPERTY_TYPES = [
   {
@@ -31,40 +25,36 @@ interface PropertyTypesProps {
 
 export function PropertyTypes({ onGetQuote }: PropertyTypesProps) {
   return (
-    <section className="bg-[#1a1a2e] py-16 px-4 md:px-8">
-      <div className="max-w-6xl mx-auto">
-        <p className="text-sm font-medium text-[#2CBCB0] uppercase tracking-wide mb-2">
+    <section className="px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-[1375px] mx-auto bg-black rounded-[17px] px-6 sm:px-10 lg:px-14 py-16">
+        <p className="text-sm font-medium text-muted-text uppercase tracking-widest mb-2">
           Electrical Condition Reports:
         </p>
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-12">
+        <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 font-[family-name:var(--font-display)]">
           Powering Safety Across Every Property
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {PROPERTY_TYPES.map((item) => (
-            <Card
+            <div
               key={item.title}
               className={cn(
-                "border-gray-700 bg-white/5 text-white",
+                "bg-white/5 border border-white/10 rounded-[17px] p-6",
                 "hover:bg-white/10 transition-colors"
               )}
             >
-              <CardHeader>
-                <CardTitle className="text-lg font-bold text-white">
-                  {item.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-white/90 text-sm leading-relaxed">
-                  {item.description}
-                </p>
-              </CardContent>
-            </Card>
+              <h3 className="text-lg font-bold text-white mb-3 font-[family-name:var(--font-display)]">
+                {item.title}
+              </h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                {item.description}
+              </p>
+            </div>
           ))}
         </div>
 
         <div className="flex justify-center">
-          <Button onClick={onGetQuote} variant="orange" size="lg">
+          <Button onClick={onGetQuote} variant="white" size="lg">
             Get Started Today
           </Button>
         </div>

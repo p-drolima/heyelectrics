@@ -71,7 +71,7 @@ function ReservationTimer({
           ? "border-red-300 bg-red-50 text-red-700"
           : isUrgent
             ? "border-orange-300 bg-orange-50 text-orange-700"
-            : "border-[#2CBCB0]/30 bg-[#2CBCB0]/5 text-[#1a1a2e]"
+            : "border-[#44B4D7]/30 bg-[#44B4D7]/5 text-[black]"
       )}
     >
       {isCritical ? (
@@ -300,7 +300,7 @@ function CheckoutForm() {
             <div className="flex gap-3">
               <AlertTriangle className="h-6 w-6 text-orange-500 shrink-0 mt-0.5" />
               <div className="space-y-2">
-                <h3 className="font-semibold text-[#1a1a2e]">
+                <h3 className="font-semibold text-[black]">
                   Leave payment?
                 </h3>
                 <p className="text-sm text-gray-600">
@@ -335,7 +335,7 @@ function CheckoutForm() {
         />
       )}
 
-      <Card className={cn("border-2 border-[#2CBCB0]")}>
+      <Card className={cn("border-2 border-[#44B4D7]")}>
         <CardHeader>
           <CardTitle className="text-lg">Payment – £60.00 Deposit</CardTitle>
         </CardHeader>
@@ -423,7 +423,7 @@ export function PaymentStep() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+      <h2 className="text-2xl font-semibold text-[black]">
         Confirm your booking
       </h2>
 
@@ -449,7 +449,7 @@ export function PaymentStep() {
             appearance: {
               theme: "stripe",
               variables: {
-                colorPrimary: "#2CBCB0",
+                colorPrimary: "#44B4D7",
                 borderRadius: "6px",
               },
             },

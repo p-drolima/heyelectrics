@@ -32,10 +32,10 @@ interface StepsProps {
 
 export function Steps({ onGetQuote }: StepsProps) {
   return (
-    <section className="bg-[#f8f9fa] py-16 px-4 md:px-8">
-      <div className="max-w-6xl mx-auto">
+    <section className="px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-[1375px] mx-auto bg-[#F4F6FA] rounded-[17px] px-6 sm:px-10 lg:px-14 py-16">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a2e]">
+          <h2 className="text-2xl md:text-3xl font-bold text-black font-[family-name:var(--font-display)]">
             Quick & Easy Electrical Safety in 3 Simple Steps
           </h2>
           <Button onClick={onGetQuote} className="shrink-0 w-fit">
@@ -48,21 +48,21 @@ export function Steps({ onGetQuote }: StepsProps) {
             <div
               key={step.number}
               className={cn(
-                "flex flex-col items-start bg-white rounded-lg p-6",
-                "shadow-sm border border-gray-100",
+                "flex flex-col items-start bg-white rounded-[17px] p-6",
+                "shadow-sm",
                 "hover:shadow-md transition-shadow"
               )}
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#2CBCB0] text-white font-bold text-lg">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black text-white font-bold text-lg font-[family-name:var(--font-display)]">
                   {step.number}
                 </div>
-                <step.icon className="h-8 w-8 text-[#2CBCB0]" aria-hidden />
+                <step.icon className="h-8 w-8 text-black/40" aria-hidden />
               </div>
-              <h3 className="text-lg font-bold text-[#1a1a2e] mb-2">
+              <h3 className="text-lg font-bold text-black mb-2 font-[family-name:var(--font-display)]">
                 {step.title}
               </h3>
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-muted-text text-sm leading-relaxed">
                 {step.description}
               </p>
             </div>

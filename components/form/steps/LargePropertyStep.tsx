@@ -72,7 +72,7 @@ export function LargePropertyStep() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <div>
-        <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+        <h2 className="text-2xl font-semibold text-black">
           Properties with more than 5 bedrooms
         </h2>
         <p className="mt-2 text-gray-600">

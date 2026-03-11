@@ -15,11 +15,11 @@ function ThankYouContent() {
     <div className="min-h-[70vh] flex flex-col items-center justify-center text-center px-4">
       <div className="max-w-md space-y-6">
         <div className="flex justify-center">
-          <div className="rounded-full bg-[#2CBCB0]/10 p-4">
-            <CheckCircle className="h-16 w-16 text-[#2CBCB0]" />
+          <div className="rounded-full bg-[#44B4D7]/10 p-4">
+            <CheckCircle className="h-16 w-16 text-[#44B4D7]" />
           </div>
         </div>
-        <h1 className="text-3xl font-bold text-[#1a1a2e]">
+        <h1 className="text-3xl font-bold text-[black]">
           Thank You!
         </h1>
         <p className="text-gray-600">
@@ -28,7 +28,7 @@ function ThankYouContent() {
         {ref && (
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-500 mb-1">Your booking reference</p>
-            <p className="font-mono font-bold text-lg text-[#1a1a2e]">{ref}</p>
+            <p className="font-mono font-bold text-lg text-[black]">{ref}</p>
           </div>
         )}
         <Button asChild variant="default" size="lg">

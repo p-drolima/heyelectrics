@@ -15,8 +15,8 @@ interface ServicesProps {
 
 export function Services({ onGetQuote }: ServicesProps) {
   return (
-    <section className="bg-white py-12 px-4 md:px-8">
-      <div className="max-w-6xl mx-auto">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-[1375px] mx-auto">
         <div
           className={cn(
             "flex flex-col lg:flex-row lg:items-center lg:justify-between",
@@ -24,16 +24,16 @@ export function Services({ onGetQuote }: ServicesProps) {
           )}
         >
           <div className="flex-1">
-            <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a2e] mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-black mb-6 font-[family-name:var(--font-display)]">
               Ensure Electrical Safety Today with Professional EICR Services
             </h2>
             <ul className="space-y-3">
               {BULLET_POINTS.map((point) => (
                 <li
                   key={point}
-                  className="flex items-center gap-3 text-gray-700 text-base md:text-lg"
+                  className="flex items-center gap-3 text-muted-text text-base md:text-lg"
                 >
-                  <span className="shrink-0 rounded-full bg-[#2CBCB0] p-0.5">
+                  <span className="shrink-0 rounded-full bg-black p-0.5">
                     <Check className="h-4 w-4 text-white" strokeWidth={2.5} />
                   </span>
                   {point}
