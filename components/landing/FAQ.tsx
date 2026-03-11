@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -33,19 +32,19 @@ const FAQ_ITEMS = [
 
 export function FAQ() {
   return (
-    <section className="py-16 px-4 md:px-8 bg-white">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a2e] text-center mb-10">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-[1375px] mx-auto">
+        <h2 className="text-2xl md:text-3xl font-bold text-black text-center mb-10 font-[family-name:var(--font-display)]">
           Frequently Asked Questions
         </h2>
 
         <Accordion type="single" collapsible className="w-full">
           {FAQ_ITEMS.map((item) => (
             <AccordionItem key={item.question} value={item.question}>
-              <AccordionTrigger className="text-left text-[#1a1a2e] hover:text-[#2CBCB0]">
+              <AccordionTrigger className="text-left text-black hover:opacity-70 font-[family-name:var(--font-display)]">
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className="text-gray-600 leading-relaxed">
+              <AccordionContent className="text-muted-text leading-relaxed">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>

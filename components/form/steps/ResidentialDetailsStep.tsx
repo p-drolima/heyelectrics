@@ -48,7 +48,7 @@ export function ResidentialDetailsStep() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-      <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+      <h2 className="text-2xl font-semibold text-black">
         Tell us about your property
       </h2>
 
@@ -68,7 +68,7 @@ export function ResidentialDetailsStep() {
                     className={cn(
                       "rounded-md border px-4 py-3 text-left text-sm font-medium transition-colors",
                       field.value === subtype
-                        ? "border-[#2CBCB0] bg-[#2CBCB0]/10 text-[#2CBCB0]"
+                        ? "border-[#44B4D7] bg-[#44B4D7]/10 text-[#44B4D7]"
                         : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
                     )}
                   >

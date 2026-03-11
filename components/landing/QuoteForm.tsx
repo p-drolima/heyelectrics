@@ -11,7 +11,6 @@ import { useQuoteFormState } from "./QuoteFormStateContext";
 interface QuoteFormProps {
   onSubmitted?: () => void;
   className?: string;
-  /** Unique id prefix to avoid duplicate DOM ids when Hero + Modal both render */
   idPrefix?: string;
 }
 
@@ -56,10 +55,10 @@ export function QuoteForm({ onSubmitted, className, idPrefix = "" }: QuoteFormPr
           type="button"
           onClick={() => handlePropertyTypeChange("residential")}
           className={cn(
-            "flex-1 py-2.5 px-4 rounded-lg text-sm font-medium text-center transition-colors cursor-pointer",
+            "flex-1 py-2.5 px-4 rounded-full text-sm font-medium text-center transition-all cursor-pointer",
             propertyType === "residential"
-              ? "bg-[#2CBCB0] text-white"
-              : "bg-white border border-gray-300 text-gray-700 hover:border-gray-400"
+              ? "bg-black text-white"
+              : "bg-[#F4F6FA] text-black hover:bg-gray-200"
           )}
         >
           Residential
@@ -68,10 +67,10 @@ export function QuoteForm({ onSubmitted, className, idPrefix = "" }: QuoteFormPr
           type="button"
           onClick={() => handlePropertyTypeChange("commercial")}
           className={cn(
-            "flex-1 py-2.5 px-4 rounded-lg text-sm font-medium text-center transition-colors cursor-pointer",
+            "flex-1 py-2.5 px-4 rounded-full text-sm font-medium text-center transition-all cursor-pointer",
             propertyType === "commercial"
-              ? "bg-[#2CBCB0] text-white"
-              : "bg-white border border-gray-300 text-gray-700 hover:border-gray-400"
+              ? "bg-black text-white"
+              : "bg-[#F4F6FA] text-black hover:bg-gray-200"
           )}
         >
           Commercial
@@ -99,7 +98,7 @@ export function QuoteForm({ onSubmitted, className, idPrefix = "" }: QuoteFormPr
         />
         <label
           htmlFor={consentId}
-          className="text-sm text-gray-600 cursor-pointer leading-snug"
+          className="text-sm text-muted-text cursor-pointer leading-snug"
         >
           {previouslyConsented
             ? "Privacy policy and terms previously accepted"
@@ -110,10 +109,7 @@ export function QuoteForm({ onSubmitted, className, idPrefix = "" }: QuoteFormPr
       <Button
         onClick={handleSubmit}
         disabled={!isReady}
-        className={cn(
-          "w-full py-6 text-base font-semibold",
-          "bg-[#2CBCB0] hover:bg-[#249e94]"
-        )}
+        className="w-full py-6 text-base font-semibold"
       >
         Get Your Quote
       </Button>

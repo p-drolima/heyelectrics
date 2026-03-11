@@ -134,7 +134,7 @@ export function CalendarStep() {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+      <h2 className="text-2xl font-semibold text-black">
         Choose your preferred date
       </h2>
 

@@ -22,7 +22,7 @@ export function BedroomsStep() {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+      <h2 className="text-2xl font-semibold text-black">
         How many bedrooms does the property have?
       </h2>
 
@@ -36,7 +36,7 @@ export function BedroomsStep() {
             className={cn(
               "min-w-16 h-14 text-lg font-semibold transition-all",
               formData.bedrooms === count
-                ? "bg-[#2CBCB0] hover:bg-[#249e94] text-white"
+                ? "bg-[#44B4D7] hover:bg-[#3a9cbc] text-white"
                 : ""
             )}
             onClick={() => handleSelect(count)}
@@ -49,9 +49,9 @@ export function BedroomsStep() {
           variant="outline"
           size="lg"
           className={cn(
-            "min-w-24 h-14 text-lg font-semibold transition-all border-[#F97316] text-[#F97316] hover:bg-[#F97316]/10",
+            "min-w-24 h-14 text-lg font-semibold transition-all border-[#44B4D7] text-[#44B4D7] hover:bg-[#44B4D7]/10",
             formData.bedrooms !== null && formData.bedrooms > 5
-              ? "bg-[#F97316]/10 border-2"
+              ? "bg-[#44B4D7]/10 border-2"
               : ""
           )}
           onClick={handleMoreThanFive}

@@ -27,12 +27,12 @@ export default function EICRPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-[#F4F6FA]">
         <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
           <div className="mb-8">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#2CBCB0] transition-colors"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-text hover:text-black transition-colors"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               Back to home
@@ -41,7 +41,7 @@ export default function EICRPage() {
           <Suspense
             fallback={
               <div className="flex justify-center py-12">
-                <div className="animate-pulse text-gray-400">Loading form...</div>
+                <div className="animate-pulse text-muted-text">Loading form...</div>
               </div>
             }
           >

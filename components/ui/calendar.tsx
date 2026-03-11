@@ -26,7 +26,7 @@ function Calendar({
         caption_label: "sr-only",
         dropdowns: "flex items-center gap-2",
         dropdown:
-          "appearance-none bg-white border border-gray-200 rounded-md px-2 py-1.5 text-sm font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2CBCB0] focus:border-[#2CBCB0]",
+          "appearance-none bg-white border border-gray-200 rounded-md px-2 py-1.5 text-sm font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#44B4D7] focus:border-[#44B4D7]",
         nav: "contents",
         button_previous: cn(
           "absolute -left-14 top-1/2 -translate-y-1/2",
@@ -49,7 +49,7 @@ function Calendar({
         ),
         range_end: "day-range-end",
         selected:
-          "bg-[#2CBCB0] text-white hover:bg-[#249e94] hover:text-white focus:bg-[#2CBCB0] focus:text-white",
+          "bg-[#44B4D7] text-white hover:bg-[#3a9cbc] hover:text-white focus:bg-[#44B4D7] focus:text-white",
         today: "bg-gray-100 text-gray-900",
         outside:
           "day-outside text-gray-400 aria-selected:bg-gray-100/50 aria-selected:text-gray-400",

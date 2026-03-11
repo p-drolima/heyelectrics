@@ -63,7 +63,7 @@ export function PropertyTypeStep() {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-semibold text-[#1a1a2e]">
+      <h2 className="text-2xl font-semibold text-black">
         What type of property is this for?
       </h2>
 
@@ -103,18 +103,18 @@ export function PropertyTypeStep() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Card
           className={cn(
-            "cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-[#2CBCB0]/50",
+            "cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-[#44B4D7]/50",
             formData.propertyType === "residential"
-              ? "border-2 border-[#2CBCB0] bg-[#2CBCB0]/5 shadow-md"
+              ? "border-2 border-[#44B4D7] bg-[#44B4D7]/5 shadow-md"
               : "border-gray-200"
           )}
           onClick={() => handleSelect("residential")}
         >
           <CardContent className="flex flex-col items-center justify-center p-8 text-center">
-            <div className="mb-4 rounded-full bg-[#2CBCB0]/20 p-4">
-              <Home className="h-10 w-10 text-[#2CBCB0]" />
+            <div className="mb-4 rounded-full bg-[#44B4D7]/20 p-4">
+              <Home className="h-10 w-10 text-[#44B4D7]" />
             </div>
-            <h3 className="text-lg font-semibold text-[#1a1a2e] mb-2">
+            <h3 className="text-lg font-semibold text-black mb-2">
               Residential
             </h3>
             <p className="text-sm text-gray-600">
@@ -125,18 +125,18 @@ export function PropertyTypeStep() {
 
         <Card
           className={cn(
-            "cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-[#2CBCB0]/50",
+            "cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-[#44B4D7]/50",
             formData.propertyType === "commercial"
-              ? "border-2 border-[#2CBCB0] bg-[#2CBCB0]/5 shadow-md"
+              ? "border-2 border-[#44B4D7] bg-[#44B4D7]/5 shadow-md"
               : "border-gray-200"
           )}
           onClick={() => handleSelect("commercial")}
         >
           <CardContent className="flex flex-col items-center justify-center p-8 text-center">
-            <div className="mb-4 rounded-full bg-[#2CBCB0]/20 p-4">
-              <Building2 className="h-10 w-10 text-[#2CBCB0]" />
+            <div className="mb-4 rounded-full bg-[#44B4D7]/20 p-4">
+              <Building2 className="h-10 w-10 text-[#44B4D7]" />
             </div>
-            <h3 className="text-lg font-semibold text-[#1a1a2e] mb-2">
+            <h3 className="text-lg font-semibold text-black mb-2">
               Commercial
             </h3>
             <p className="text-sm text-gray-600">

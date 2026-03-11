@@ -38,13 +38,13 @@ function ReturningUserBanner() {
   if (!isReturningUser) return null;
 
   return (
-    <div className="mb-6 rounded-xl bg-[#2CBCB0]/10 border border-[#2CBCB0]/20 px-5 py-3.5 flex items-center justify-between gap-4">
-      <p className="text-sm text-[#1a1a2e]">
+    <div className="mb-6 rounded-xl bg-[#FFEA60]/20 border border-[#FFEA60]/40 px-5 py-3.5 flex items-center justify-between gap-4">
+      <p className="text-sm text-black">
         Welcome back! You can continue where you left off.
       </p>
       <button
         onClick={resetForm}
-        className="flex items-center gap-1.5 text-sm text-[#2CBCB0] hover:text-[#249e94] font-medium whitespace-nowrap transition-colors cursor-pointer"
+        className="flex items-center gap-1.5 text-sm text-black hover:opacity-70 font-medium whitespace-nowrap transition-opacity cursor-pointer"
       >
         <RotateCcw className="h-3.5 w-3.5" />
         Start over
@@ -59,14 +59,14 @@ function PropertyTypeIndicator() {
   if (currentStep === "property-type" || !formData.propertyType) return null;
 
   return (
-    <div className="mb-2 flex items-center justify-center gap-2 text-sm text-gray-500">
+    <div className="mb-2 flex items-center justify-center gap-2 text-sm text-muted-text">
       <span className="inline-flex items-center gap-1.5">
         <span
           className={cn(
             "inline-block h-2 w-2 rounded-full",
             formData.propertyType === "residential"
-              ? "bg-[#2CBCB0]"
-              : "bg-orange-500"
+              ? "bg-black"
+              : "bg-muted-text"
           )}
         />
         {formData.propertyType === "residential"
@@ -77,7 +77,7 @@ function PropertyTypeIndicator() {
       <span className="text-gray-300">|</span>
       <button
         onClick={() => setCurrentStep("property-type")}
-        className="text-[#2CBCB0] hover:text-[#249e94] text-xs font-medium transition-colors cursor-pointer"
+        className="text-black hover:opacity-70 text-xs font-medium transition-opacity cursor-pointer"
       >
         Change
       </button>
@@ -105,15 +105,14 @@ function StepIndicator() {
 
             return (
               <div key={step} className="flex items-center flex-1 last:flex-none">
-                {/* Step node */}
                 <div className="flex flex-col items-center gap-2">
                   <div
                     className={cn(
-                      "relative flex items-center justify-center w-10 h-10 rounded-full border-2 text-sm font-semibold transition-all duration-300",
+                      "relative flex items-center justify-center w-10 h-10 rounded-full border-2 text-sm font-semibold transition-all duration-300 font-[family-name:var(--font-display)]",
                       isCompleted &&
-                        "border-[#2CBCB0] bg-[#2CBCB0] text-white",
+                        "border-[#44B4D7] bg-[#44B4D7] text-white",
                       isCurrent &&
-                        "border-[#2CBCB0] bg-white text-[#2CBCB0] shadow-[0_0_0_4px_rgba(44,188,176,0.15)]",
+                        "border-[#44B4D7] bg-white text-[#44B4D7] shadow-[0_0_0_4px_rgba(68,180,215,0.15)]",
                       !isCompleted &&
                         !isCurrent &&
                         "border-gray-200 bg-white text-gray-400"
@@ -128,8 +127,8 @@ function StepIndicator() {
                   <span
                     className={cn(
                       "text-xs font-medium whitespace-nowrap",
-                      isCompleted && "text-[#2CBCB0]",
-                      isCurrent && "text-[#1a1a2e]",
+                      isCompleted && "text-black",
+                      isCurrent && "text-black",
                       !isCompleted && !isCurrent && "text-gray-400"
                     )}
                   >
@@ -137,13 +136,12 @@ function StepIndicator() {
                   </span>
                 </div>
 
-                {/* Connector line */}
                 {index < RESIDENTIAL_STEPS.length - 1 && (
                   <div className="flex-1 mx-2 self-start mt-5">
                     <div className="h-0.5 w-full relative bg-gray-200 rounded-full overflow-hidden">
                       <div
                         className={cn(
-                          "absolute inset-y-0 left-0 bg-[#2CBCB0] rounded-full transition-all duration-500",
+                          "absolute inset-y-0 left-0 bg-[#44B4D7] rounded-full transition-all duration-500",
                           isCompleted ? "w-full" : "w-0"
                         )}
                       />
@@ -159,10 +157,10 @@ function StepIndicator() {
       {/* Mobile */}
       <div className="sm:hidden">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-medium text-[#1a1a2e]">
+          <span className="text-sm font-medium text-black">
             Step {currentIndex + 1} of {RESIDENTIAL_STEPS.length}
           </span>
-          <span className="text-sm font-semibold text-[#2CBCB0]">
+          <span className="text-sm font-semibold text-black">
             {stepLabels[currentStep]}
           </span>
         </div>
@@ -172,9 +170,7 @@ function StepIndicator() {
               key={step}
               className={cn(
                 "h-1.5 flex-1 rounded-full transition-all duration-300",
-                index < currentIndex && "bg-[#2CBCB0]",
-                index === currentIndex && "bg-[#2CBCB0]",
-                index > currentIndex && "bg-gray-200"
+                index <= currentIndex ? "bg-[#44B4D7]" : "bg-gray-200"
               )}
             />
           ))}
@@ -202,7 +198,7 @@ export function StepWizard() {
   if (!hydrated) {
     return (
       <div className="w-full max-w-2xl mx-auto flex justify-center py-12">
-        <div className="animate-pulse text-gray-400">Loading...</div>
+        <div className="animate-pulse text-muted-text">Loading...</div>
       </div>
     );
   }
