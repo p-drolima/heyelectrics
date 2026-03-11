@@ -9,11 +9,13 @@ let _db: DbInstance | undefined;
 export function getDb(): DbInstance {
   if (!_db) {
     const connectionString =
-      process.env.STORAGE_URL;
+      process.env.DATABASE_URL ||
+      process.env.STORAGE_URL ||
+      process.env.STORAGE_DATABASE_URL;
 
     if (!connectionString) {
       throw new Error(
-        "DATABASE_URL, POSTGRES_URL, or STORAGE_URL must be set"
+        "DATABASE_URL, STORAGE_URL, or STORAGE_DATABASE_URL must be set"
       );
     }
 
