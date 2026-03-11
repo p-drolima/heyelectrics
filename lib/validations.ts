@@ -19,7 +19,7 @@ export const bedroomOptions = [1, 2, 3, 4, 5] as const;
 
 export const residentialDetailsSchema = z.object({
   propertySubtype: z.enum(propertySubtypes, {
-    required_error: "Please select a property type",
+    message: "Please select a property type",
   }),
   fullName: z.string().min(2, "Full name is required"),
   companyName: z.string().optional(),
@@ -71,7 +71,7 @@ export const calendarSchema = z.object({
 
 export const paymentSchema = z.object({
   agreeToTerms: z.literal(true, {
-    errorMap: () => ({ message: "You must agree to the terms and conditions" }),
+    message: "You must agree to the terms and conditions",
   }),
 });
 
