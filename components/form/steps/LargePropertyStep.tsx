@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { largePropertySchema, type LargeProperty } from "@/lib/validations";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
+import { FormActions } from "@/components/form/FormActions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -135,14 +136,14 @@ export function LargePropertyStep() {
         <p className="text-sm text-red-500">{submitError}</p>
       )}
 
-      <div className="flex gap-4 pt-4">
-        <Button type="button" variant="outline" onClick={goBack} disabled={isSubmitting}>
-          Back
-        </Button>
-        <Button type="submit" disabled={isSubmitting}>
+      <FormActions>
+        <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
           {isSubmitting ? "Submitting..." : "Submit Enquiry"}
         </Button>
-      </div>
+        <Button type="button" variant="outline" onClick={goBack} disabled={isSubmitting} className="w-full sm:w-auto">
+          Back
+        </Button>
+      </FormActions>
     </form>
   );
 }

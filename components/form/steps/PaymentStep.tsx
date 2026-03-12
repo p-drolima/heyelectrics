@@ -11,6 +11,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
+import { FormActions } from "@/components/form/FormActions";
 import {
   Card,
   CardContent,
@@ -128,37 +129,57 @@ function BookingSummary() {
     });
   };
 
+  const propertyLabel = formData.propertySubtype
+    ? `${formData.propertySubtype}`
+    : formData.propertyType === "residential"
+      ? "Residential"
+      : "Commercial";
+
+  const addressLine = [
+    formData.addressLine1,
+    formData.city,
+    formData.postcode,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="text-lg">Booking Summary</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2 text-sm">
-        <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-          <span className="text-gray-500">Property type:</span>
-          <span>
-            {formData.propertyType}
-            {formData.propertySubtype && ` – ${formData.propertySubtype}`}
-          </span>
-          <span className="text-gray-500">Address:</span>
-          <span>
-            {formData.addressLine1}
-            {formData.city && `, ${formData.city}`}
-            {formData.postcode && ` ${formData.postcode}`}
-          </span>
-          <span className="text-gray-500">Bedrooms:</span>
-          <span>{formData.bedrooms ?? "—"}</span>
-          <span className="text-gray-500">Date:</span>
-          <span>{formatDate(formData.bookingDate)}</span>
-          <span className="text-gray-500">Name:</span>
-          <span>{formData.fullName}</span>
-          <span className="text-gray-500">Email:</span>
-          <span>{formData.email}</span>
-          <span className="text-gray-500">Deposit:</span>
-          <span className="font-semibold">£60.00</span>
+    <div className="rounded-2xl bg-[#F4F6FA] p-4 sm:p-6 mb-6 space-y-4">
+      <h3 className="text-sm font-semibold text-muted-text uppercase tracking-wider">
+        Booking Summary
+      </h3>
+
+      <div className="space-y-3">
+        <div className="min-w-0">
+          <p className="text-xs text-muted-text">Property</p>
+          <p className="text-sm font-medium text-black truncate">{propertyLabel}</p>
+          {formData.bedrooms && (
+            <p className="text-xs text-muted-text">{formData.bedrooms} bedroom{formData.bedrooms > 1 ? "s" : ""}</p>
+          )}
         </div>
-      </CardContent>
-    </Card>
+
+        <div className="min-w-0">
+          <p className="text-xs text-muted-text">Address</p>
+          <p className="text-sm font-medium text-black">{addressLine}</p>
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-xs text-muted-text">Date</p>
+          <p className="text-sm font-medium text-black">{formatDate(formData.bookingDate)}</p>
+        </div>
+
+        <div className="min-w-0">
+          <p className="text-xs text-muted-text">Contact</p>
+          <p className="text-sm font-medium text-black">{formData.fullName}</p>
+          <p className="text-xs text-muted-text truncate">{formData.email}</p>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-200 pt-3 flex items-center justify-between">
+        <span className="text-sm text-muted-text">Deposit due today</span>
+        <span className="text-lg font-bold text-black font-display">£60.00</span>
+      </div>
+    </div>
   );
 }
 
@@ -366,22 +387,24 @@ function CheckoutForm() {
         <p className="text-sm text-red-500">{errorMessage}</p>
       )}
 
-      <div className="flex gap-4 pt-2">
+      <FormActions>
+        <Button
+          onClick={handleSubmit}
+          disabled={!stripe || !elements || !agreeToTerms || isSubmitting}
+          className="w-full sm:w-auto"
+        >
+          {isSubmitting ? "Processing..." : "Pay £60.00 & Confirm Booking"}
+        </Button>
         <Button
           type="button"
           variant="outline"
           onClick={handleBackClick}
           disabled={isSubmitting}
+          className="w-full sm:w-auto"
         >
           Back
         </Button>
-        <Button
-          onClick={handleSubmit}
-          disabled={!stripe || !elements || !agreeToTerms || isSubmitting}
-        >
-          {isSubmitting ? "Processing..." : "Pay £60.00 & Confirm Booking"}
-        </Button>
-      </div>
+      </FormActions>
     </div>
   );
 }

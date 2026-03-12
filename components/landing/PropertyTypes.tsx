@@ -27,10 +27,10 @@ export function PropertyTypes({ onGetQuote }: PropertyTypesProps) {
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-4">
       <div className="max-w-[1375px] mx-auto bg-black rounded-[17px] px-6 sm:px-10 lg:px-14 py-16">
-        <p className="text-sm font-medium text-muted-text uppercase tracking-widest mb-2">
+        <p className="text-sm font-medium text-white/60 uppercase tracking-widest mb-2 font-display">
           Electrical Condition Reports:
         </p>
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 font-[family-name:var(--font-display)]">
+        <h2 className="text-2xl md:text-3xl font-bold text-white mb-12 font-display">
           Powering Safety Across Every Property
         </h2>
 
@@ -43,7 +43,7 @@ export function PropertyTypes({ onGetQuote }: PropertyTypesProps) {
                 "hover:bg-white/10 transition-colors"
               )}
             >
-              <h3 className="text-lg font-bold text-white mb-3 font-[family-name:var(--font-display)]">
+              <h3 className="text-lg font-bold text-white mb-3 font-display">
                 {item.title}
               </h3>
               <p className="text-white/70 text-sm leading-relaxed">

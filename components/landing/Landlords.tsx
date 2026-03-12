@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -15,8 +16,8 @@ export function Landlords({ onGetQuote }: LandlordsProps) {
             "items-center"
           )}
         >
-          <div className="flex flex-col gap-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-black font-[family-name:var(--font-display)]">
+          <div className="flex flex-col gap-6 order-2 md:order-1">
+            <h2 className="text-2xl md:text-3xl font-bold text-black font-display">
               EICR Inspections for Landlords & Homeowners
             </h2>
             <p className="text-muted-text leading-relaxed text-lg">
@@ -40,12 +41,14 @@ export function Landlords({ onGetQuote }: LandlordsProps) {
             </Button>
           </div>
 
-          <div className="flex justify-center md:justify-end">
-            <div
-              className="w-full max-w-[400px] rounded-[17px] bg-[#F4F6FA] flex items-center justify-center text-muted-text text-sm font-medium aspect-4/3"
-              aria-label="Image placeholder"
-            >
-              Image Placeholder
+          <div className="flex justify-center md:justify-end order-1 md:order-2">
+            <div className="relative w-full max-w-[500px] aspect-[4/3]">
+              <Image
+                src="/images/section_2.png"
+                alt="EICR Inspection for Landlords"
+                fill
+                className="object-cover rounded-[17px]"
+              />
             </div>
           </div>
         </div>
