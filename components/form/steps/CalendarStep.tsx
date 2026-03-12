@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
+import { FormActions } from "@/components/form/FormActions";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import type { Matcher } from "react-day-picker";
@@ -184,17 +185,18 @@ export function CalendarStep() {
         10 minutes once you proceed to payment.
       </p>
 
-      <div className="flex gap-4 pt-4">
-        <Button type="button" variant="outline" onClick={goBack}>
-          Back
-        </Button>
+      <FormActions>
         <Button
           onClick={handleNext}
           disabled={!selectedDate || reserving}
+          className="w-full sm:w-auto"
         >
           {reserving ? "Reserving slot..." : "Next"}
         </Button>
-      </div>
+        <Button type="button" variant="outline" onClick={goBack} className="w-full sm:w-auto">
+          Back
+        </Button>
+      </FormActions>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { addressSchema, type Address } from "@/lib/validations";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
+import { FormActions } from "@/components/form/FormActions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -152,28 +153,26 @@ export function AddressFinderStep() {
         >
           <div className="space-y-2">
             <Label htmlFor="postcode">Postcode</Label>
-            <div className="flex gap-2">
-              <Input
-                id="postcode"
-                {...register("postcode")}
-                placeholder="e.g. M1 1AA"
-                className="flex-1"
-              />
-              <Button type="submit" disabled={loading}>
-                {loading ? "Finding..." : "Find Address"}
-              </Button>
-            </div>
+            <Input
+              id="postcode"
+              {...register("postcode")}
+              placeholder="e.g. M1 1AA"
+              className="w-full"
+            />
           </div>
 
           {validationError && (
             <p className="text-sm text-red-500">{validationError}</p>
           )}
 
-          <div className="flex gap-4 pt-4">
-            <Button type="button" variant="outline" onClick={goBack}>
+          <FormActions>
+            <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+              {loading ? "Finding..." : "Find Address"}
+            </Button>
+            <Button type="button" variant="outline" onClick={goBack} className="w-full sm:w-auto">
               Back
             </Button>
-          </div>
+          </FormActions>
         </form>
       </div>
     );
@@ -284,12 +283,12 @@ export function AddressFinderStep() {
         )}
       </div>
 
-      <div className="flex gap-4 pt-4">
-        <Button type="button" variant="outline" onClick={goBack}>
+      <FormActions>
+        <Button type="submit" className="w-full sm:w-auto">Next</Button>
+        <Button type="button" variant="outline" onClick={goBack} className="w-full sm:w-auto">
           Back
         </Button>
-        <Button type="submit">Next</Button>
-      </div>
+      </FormActions>
     </form>
   );
 }

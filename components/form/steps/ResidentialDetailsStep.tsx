@@ -9,6 +9,7 @@ import {
 } from "@/lib/validations";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
+import { FormActions } from "@/components/form/FormActions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -133,12 +134,12 @@ export function ResidentialDetailsStep() {
         </div>
       </div>
 
-      <div className="flex gap-4 pt-4">
-        <Button type="button" variant="outline" onClick={goBack}>
+      <FormActions>
+        <Button type="submit" className="w-full sm:w-auto">Next</Button>
+        <Button type="button" variant="outline" onClick={goBack} className="w-full sm:w-auto">
           Back
         </Button>
-        <Button type="submit">Next</Button>
-      </div>
+      </FormActions>
     </form>
   );
 }

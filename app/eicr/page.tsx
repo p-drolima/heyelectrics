@@ -28,8 +28,8 @@ export default function EICRPage() {
     <>
       <Header />
       <main className="min-h-screen bg-[#F4F6FA]">
-        <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
-          <div className="mb-8">
+        <div className="max-w-4xl mx-auto px-4 py-6 sm:py-12 pb-32 sm:pb-12">
+          <div className="mb-6 sm:mb-8">
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 text-sm text-muted-text hover:text-black transition-colors"

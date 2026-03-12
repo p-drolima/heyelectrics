@@ -3,6 +3,7 @@
 import { AlertCircle } from "lucide-react";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
+import { FormActions } from "@/components/form/FormActions";
 import { cn } from "@/lib/utils";
 
 const BEDROOM_COUNTS = [1, 2, 3, 4, 5] as const;
@@ -65,11 +66,11 @@ export function BedroomsStep() {
         Select &quot;5+&quot; for properties with more than 5 bedrooms (e.g. large houses, HMOs).
       </p>
 
-      <div className="pt-4">
-        <Button type="button" variant="outline" onClick={goBack}>
+      <FormActions>
+        <Button type="button" variant="outline" onClick={goBack} className="w-full sm:w-auto">
           Back
         </Button>
-      </div>
+      </FormActions>
     </div>
   );
 }

@@ -28,16 +28,8 @@ function Calendar({
         dropdown:
           "appearance-none bg-white border border-gray-200 rounded-md px-2 py-1.5 text-sm font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#44B4D7] focus:border-[#44B4D7]",
         nav: "contents",
-        button_previous: cn(
-          "absolute -left-14 top-1/2 -translate-y-1/2",
-          "inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 shadow-sm transition-colors cursor-pointer",
-          "h-10 w-10"
-        ),
-        button_next: cn(
-          "absolute -right-14 top-1/2 -translate-y-1/2",
-          "inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 shadow-sm transition-colors cursor-pointer",
-          "h-10 w-10"
-        ),
+        button_previous: "hidden",
+        button_next: "hidden",
         month_grid: "w-full border-collapse space-y-1",
         weekdays: "flex",
         weekday: "text-gray-500 rounded-md w-9 font-normal text-[0.8rem]",

@@ -82,19 +82,19 @@ export function PropertyTypeStep() {
               </p>
             </div>
           </div>
-          <div className="flex gap-2 justify-end">
+          <div className="flex flex-col sm:flex-row-reverse gap-3 justify-end">
+            <Button
+              onClick={handleConfirmSwitch}
+              className="bg-orange-600 hover:bg-orange-700 text-sm w-full sm:w-auto"
+            >
+              Continue
+            </Button>
             <Button
               variant="outline"
               onClick={handleCancelSwitch}
-              className="text-sm"
+              className="text-sm w-full sm:w-auto"
             >
               Cancel
-            </Button>
-            <Button
-              onClick={handleConfirmSwitch}
-              className="bg-orange-600 hover:bg-orange-700 text-sm"
-            >
-              Continue
             </Button>
           </div>
         </div>
