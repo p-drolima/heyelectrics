@@ -293,8 +293,9 @@ function CheckoutForm() {
 
         const data = await res.json();
         const ref = data?.bookingReference ?? formData.bookingReference;
+        const isNew = data?.isNewCustomer !== false;
         updateFormData({ bookingReference: ref });
-        router.push(`/thank-you?ref=${encodeURIComponent(ref)}`);
+        router.push(`/thank-you?ref=${encodeURIComponent(ref)}&new=${isNew}`);
       } else {
         setErrorMessage("Payment was not completed. Please try again.");
         setIsSubmitting(false);

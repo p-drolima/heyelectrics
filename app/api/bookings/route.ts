@@ -87,6 +87,13 @@ export async function POST(request: Request) {
 
     const ref = row?.bookingReference ?? bookingReference;
 
+    // Check if this is a returning customer (has previous bookings with same email)
+    const [{ count: prevCount }] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(bookings)
+      .where(eq(bookings.email, String(email)));
+    const isNewCustomer = Number(prevCount) <= 1;
+
     // Release the slot reservation now that the booking is confirmed
     if (reservationToken) {
       db.delete(slotReservations)
@@ -116,6 +123,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       bookingReference: ref,
       id: row?.id,
+      isNewCustomer,
     });
   } catch (error) {
     console.error("Booking error:", error);
