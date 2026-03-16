@@ -266,6 +266,7 @@ function CheckoutForm() {
       }
 
       if (paymentIntent && paymentIntent.status === "succeeded") {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { bookingReference: _unused, ...submitData } = formData;
         const res = await fetch("/api/bookings", {
           method: "POST",
