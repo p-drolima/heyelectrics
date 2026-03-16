@@ -3,28 +3,14 @@
 // Update this list based on the client's service area.
 export const ALLOWED_POSTCODE_PREFIXES = [
   "M",    // Manchester
-  "OL",   // Oldham
   "SK",   // Stockport
-  "BL",   // Bolton
+  "OL",   // Oldham
   "WN",   // Wigan
   "WA",   // Warrington
-  "L",    // Liverpool
-  "CH",   // Chester
   "CW",   // Crewe
-  "ST",   // Stoke-on-Trent
-  "DE",   // Derby
-  "NG",   // Nottingham
-  "S",    // Sheffield
+  "BL",   // Bolton
   "HD",   // Huddersfield
-  "HX",   // Halifax
-  "BD",   // Bradford
-  "LS",   // Leeds
-  "WF",   // Wakefield
-  "DN",   // Doncaster
-  "PR",   // Preston
   "BB",   // Blackburn
-  "FY",   // Blackpool
-  "LA",   // Lancaster
 ];
 
 export function isPostcodeAllowed(postcode: string): boolean {

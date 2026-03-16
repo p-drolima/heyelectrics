@@ -51,7 +51,13 @@ export function CalendarStep() {
   }, []);
 
   const disabledDays: Matcher[] = [
-    (date) => date < new Date(new Date().setHours(0, 0, 0, 0)),
+    (date) => {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      tomorrow.setHours(0, 0, 0, 0);
+      return date < tomorrow;
+    },
+    (date) => date.getDay() === 0 || date.getDay() === 6,
     ...availability.fullyBookedDates.map((d) => new Date(d)),
   ];
 
