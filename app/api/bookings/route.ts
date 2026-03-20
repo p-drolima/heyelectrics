@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { bookings, slotReservations } from "@/lib/db/schema";
 import { generateBookingReference } from "@/lib/utils";
 import { sendBookingEmails } from "@/lib/email";
+import { DEPOSIT_PENCE } from "@/lib/pricing";
 
 const MAX_BOOKINGS_PER_DAY = 7;
 
@@ -77,7 +78,7 @@ export async function POST(request: Request) {
         bedrooms: bedrooms != null ? Number(bedrooms) : null,
         bookingDate: normalizedDate,
         depositPaid: depositPaid === true,
-        depositAmount: "60.00",
+        depositAmount: (DEPOSIT_PENCE / 100).toFixed(2),
         stripePaymentIntentId: stripePaymentIntentId
           ? String(stripePaymentIntentId)
           : null,

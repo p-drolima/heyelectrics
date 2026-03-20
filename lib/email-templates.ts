@@ -1,3 +1,10 @@
+import {
+  PRICE_PER_BEDROOM_DISPLAY,
+  DEPOSIT_DISPLAY,
+  getServicePrice,
+  getBalance,
+} from "@/lib/pricing";
+
 const BRAND_COLOR = "#2CBCB0";
 const DARK_COLOR = "#1a1a2e";
 
@@ -63,9 +70,35 @@ function formatDate(dateStr: string): string {
 
 function depositBadge(paid: boolean): string {
   if (paid) {
-    return `<span style="color:#16a34a;font-weight:bold;">&pound;60.00 &ndash; Paid</span>`;
+    return `<span style="color:#16a34a;font-weight:bold;">${DEPOSIT_DISPLAY} &ndash; Paid</span>`;
   }
-  return `<span style="color:#dc2626;font-weight:bold;">&pound;60.00 &ndash; Pending</span>`;
+  return `<span style="color:#dc2626;font-weight:bold;">${DEPOSIT_DISPLAY} &ndash; Pending</span>`;
+}
+
+function pricingBreakdown(paid: boolean, bedrooms?: number | null): string {
+  if (!bedrooms) return "";
+  const service = getServicePrice(bedrooms);
+  const balance = getBalance(bedrooms);
+
+  return `
+    <div style="background-color:#f0fdf4;border:1px solid #bbf7d0;border-radius:6px;padding:16px;margin-bottom:16px;">
+      <p style="margin:0 0 8px 0;font-size:14px;font-weight:bold;color:${DARK_COLOR};">Cost Breakdown</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;">
+        <tr>
+          <td style="padding:4px 0;color:#666666;">EICR Inspection (${bedrooms} bed${bedrooms > 1 ? "s" : ""} &times; ${PRICE_PER_BEDROOM_DISPLAY})</td>
+          <td style="padding:4px 0;text-align:right;color:${DARK_COLOR};font-weight:500;">${service.display}</td>
+        </tr>
+        <tr>
+          <td style="padding:4px 0;color:${DARK_COLOR};font-weight:bold;">Deposit ${paid ? "(paid)" : "(pending)"}</td>
+          <td style="padding:4px 0;text-align:right;color:${paid ? "#16a34a" : "#dc2626"};font-weight:bold;">${DEPOSIT_DISPLAY}</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding:8px 0 0 0;border-top:1px solid #d1d5db;font-size:13px;color:#666666;">
+            Remaining balance of <strong>${balance.display}</strong> due via invoice upon completion.
+          </td>
+        </tr>
+      </table>
+    </div>`;
 }
 
 // ── Same-day booking type ───────────────────────────────────────────
@@ -219,6 +252,8 @@ export function adminBookingEmail(data: AdminBookingData): {
       ${data.stripePaymentIntentId ? row("Stripe Ref", `<span style="font-family:monospace;font-size:12px;">${data.stripePaymentIntentId}</span>`) : ""}
     </table>
 
+    ${pricingBreakdown(paid, data.bedrooms)}
+
     ${
       data.bookingDate
         ? sameDayBookingsTable(
@@ -333,6 +368,8 @@ export function customerBookingEmail(data: CustomerBookingData): {
         ${row("Deposit", depositBadge(paid))}
       </table>
     </div>
+
+    ${pricingBreakdown(paid, data.bedrooms)}
 
     <h3 style="color:${DARK_COLOR};font-size:16px;margin:0 0 12px 0;">What happens next?</h3>
     <ol style="color:#333333;font-size:14px;line-height:1.8;padding-left:20px;margin:0 0 24px 0;">
