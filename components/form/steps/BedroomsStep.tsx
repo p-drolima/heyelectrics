@@ -4,7 +4,7 @@ import { AlertCircle } from "lucide-react";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
 import { FormActions } from "@/components/form/FormActions";
-import { getServicePrice } from "@/lib/pricing";
+import { SERVICE_PRICE_DISPLAY } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 const BEDROOM_COUNTS = [1, 2, 3, 4, 5] as const;
@@ -44,7 +44,7 @@ export function BedroomsStep() {
             onClick={() => handleSelect(count)}
           >
             <span className="text-lg font-semibold">{count}</span>
-            <span className="text-xs font-normal opacity-80">{getServicePrice(count).display}</span>
+            <span className="text-xs font-normal opacity-80">{SERVICE_PRICE_DISPLAY}</span>
           </Button>
         ))}
         <Button
