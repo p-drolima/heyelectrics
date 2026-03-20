@@ -31,7 +31,7 @@ function baseLayout(content: string): string {
   </tr>
   <tr>
     <td style="background-color:#f9f9f9;padding:20px 24px;text-align:center;font-size:12px;color:#999999;">
-      <p style="margin:0;">Hey Electrics &bull; 01457 868 040</p>
+      <p style="margin:0;">Hey Electrics &bull; 0161 566 0197</p>
       <p style="margin:4px 0 0 0;">&copy; ${new Date().getFullYear()} Hey Electrics. All rights reserved.</p>
     </td>
   </tr>
@@ -377,7 +377,7 @@ export function customerBookingEmail(data: CustomerBookingData): {
       Need to change your booking? Contact us:
     </p>
     <p style="margin:0;">
-      <a href="tel:01457868040" style="color:${BRAND_COLOR};font-weight:bold;font-size:15px;text-decoration:none;">01457 868 040</a>
+      <a href="tel:01615660197" style="color:${BRAND_COLOR};font-weight:bold;font-size:15px;text-decoration:none;">0161 566 0197</a>
     </p>
   `;
 
@@ -409,7 +409,7 @@ export function customerEnquiryEmail(data: CustomerEnquiryData): {
       In the meantime, if you have any questions, don&rsquo;t hesitate to get in touch:
     </p>
     <p style="margin:0;">
-      <a href="tel:01457868040" style="color:${BRAND_COLOR};font-weight:bold;font-size:15px;text-decoration:none;">01457 868 040</a>
+      <a href="tel:01615660197" style="color:${BRAND_COLOR};font-weight:bold;font-size:15px;text-decoration:none;">0161 566 0197</a>
     </p>
   `;
 

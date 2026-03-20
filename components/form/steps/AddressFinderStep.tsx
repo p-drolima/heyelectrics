@@ -91,7 +91,7 @@ export function AddressFinderStep() {
 
       if (!validateData?.allowed) {
         setValidationError(
-          "Sorry, we don't currently cover your area. Please contact us on 01457 868 040 for assistance."
+          "Sorry, we don't currently cover your area. Please contact us on 0161 566 0197 for assistance."
         );
         setLoading(false);
         return;

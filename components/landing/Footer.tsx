@@ -60,7 +60,7 @@ export function Footer({ onGetQuote }: FooterProps) {
                 size="lg"
                 className="w-full lg:w-auto border-white text-white hover:bg-white hover:text-[#4EB4DA] bg-transparent"
               >
-                <a href="tel:01457868040">01457 868 040</a>
+                <a href="tel:01615660197">0161 566 0197</a>
               </Button>
             </div>
           </div>
@@ -88,7 +88,7 @@ export function Footer({ onGetQuote }: FooterProps) {
               <div>
                 <p className="text-black font-medium leading-7 font-nav">
                   24 Hour Emergency call out<br />
-                  Call - 01457 868 040
+                  Call - 0161 566 0197
                 </p>
               </div>
               <div>
