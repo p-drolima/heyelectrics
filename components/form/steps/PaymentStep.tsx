@@ -22,10 +22,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { Clock, AlertTriangle } from "lucide-react";
 import {
-  PRICE_PER_BEDROOM_DISPLAY,
+  SERVICE_PRICE_DISPLAY,
   DEPOSIT_DISPLAY,
-  getServicePrice,
-  getBalance,
+  BALANCE_DISPLAY,
 } from "@/lib/pricing";
 
 const stripePromise = loadStripe(
@@ -182,23 +181,17 @@ function BookingSummary() {
       </div>
 
       <div className="border-t border-gray-200 pt-3 space-y-2">
-        {formData.bedrooms && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-muted-text">
-              EICR Inspection ({formData.bedrooms} bed{formData.bedrooms > 1 ? "s" : ""} × {PRICE_PER_BEDROOM_DISPLAY})
-            </span>
-            <span className="text-sm font-medium text-black">{getServicePrice(formData.bedrooms).display}</span>
-          </div>
-        )}
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-text">EICR Inspection</span>
+          <span className="text-sm font-medium text-black">{SERVICE_PRICE_DISPLAY}</span>
+        </div>
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-black">Due today (deposit)</span>
           <span className="text-lg font-bold text-black font-display">{DEPOSIT_DISPLAY}</span>
         </div>
-        {formData.bedrooms && (
-          <p className="text-xs text-muted-text pt-1">
-            Remaining balance of {getBalance(formData.bedrooms).display} due via invoice upon completion.
-          </p>
-        )}
+        <p className="text-xs text-muted-text pt-1">
+          Remaining balance of {BALANCE_DISPLAY} due via invoice upon completion.
+        </p>
       </div>
     </div>
   );
