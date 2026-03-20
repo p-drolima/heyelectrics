@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/landing/Header";
 import { CheckCircle } from "lucide-react";
+import { DEPOSIT_NUMERIC } from "@/lib/pricing";
+
 
 declare global {
   interface Window {
@@ -22,7 +24,7 @@ function ThankYouContent() {
     if (ref && typeof window.gtag === "function") {
       window.gtag("event", "conversion", {
         send_to: "AW-16776158728/x7XGCJ2cg4gcEIi8v78-",
-        value: 60.0,
+        value: DEPOSIT_NUMERIC,
         currency: "GBP",
         transaction_id: ref,
         new_customer: isNew,

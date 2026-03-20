@@ -4,6 +4,7 @@ import { AlertCircle } from "lucide-react";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
 import { FormActions } from "@/components/form/FormActions";
+import { getServicePrice } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 const BEDROOM_COUNTS = [1, 2, 3, 4, 5] as const;
@@ -35,14 +36,15 @@ export function BedroomsStep() {
             variant={formData.bedrooms === count ? "default" : "outline"}
             size="lg"
             className={cn(
-              "min-w-16 h-14 text-lg font-semibold transition-all",
+              "min-w-20 h-auto py-3 flex flex-col items-center gap-0.5 transition-all",
               formData.bedrooms === count
                 ? "bg-[#44B4D7] hover:bg-[#3a9cbc] text-white"
                 : ""
             )}
             onClick={() => handleSelect(count)}
           >
-            {count}
+            <span className="text-lg font-semibold">{count}</span>
+            <span className="text-xs font-normal opacity-80">{getServicePrice(count).display}</span>
           </Button>
         ))}
         <Button
@@ -50,7 +52,7 @@ export function BedroomsStep() {
           variant="outline"
           size="lg"
           className={cn(
-            "min-w-24 h-14 text-lg font-semibold transition-all border-[#44B4D7] text-[#44B4D7] hover:bg-[#44B4D7]/10",
+            "min-w-24 h-auto py-3 text-lg font-semibold transition-all border-[#44B4D7] text-[#44B4D7] hover:bg-[#44B4D7]/10",
             formData.bedrooms !== null && formData.bedrooms > 5
               ? "bg-[#44B4D7]/10 border-2"
               : ""

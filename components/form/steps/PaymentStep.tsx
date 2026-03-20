@@ -21,6 +21,12 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { Clock, AlertTriangle } from "lucide-react";
+import {
+  PRICE_PER_BEDROOM_DISPLAY,
+  DEPOSIT_DISPLAY,
+  getServicePrice,
+  getBalance,
+} from "@/lib/pricing";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -175,9 +181,24 @@ function BookingSummary() {
         </div>
       </div>
 
-      <div className="border-t border-gray-200 pt-3 flex items-center justify-between">
-        <span className="text-sm text-muted-text">Deposit due today</span>
-        <span className="text-lg font-bold text-black font-display">£60.00</span>
+      <div className="border-t border-gray-200 pt-3 space-y-2">
+        {formData.bedrooms && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-text">
+              EICR Inspection ({formData.bedrooms} bed{formData.bedrooms > 1 ? "s" : ""} × {PRICE_PER_BEDROOM_DISPLAY})
+            </span>
+            <span className="text-sm font-medium text-black">{getServicePrice(formData.bedrooms).display}</span>
+          </div>
+        )}
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold text-black">Due today (deposit)</span>
+          <span className="text-lg font-bold text-black font-display">{DEPOSIT_DISPLAY}</span>
+        </div>
+        {formData.bedrooms && (
+          <p className="text-xs text-muted-text pt-1">
+            Remaining balance of {getBalance(formData.bedrooms).display} due via invoice upon completion.
+          </p>
+        )}
       </div>
     </div>
   );
@@ -360,7 +381,7 @@ function CheckoutForm() {
 
       <Card className={cn("border-2 border-[#44B4D7]")}>
         <CardHeader>
-          <CardTitle className="text-lg">Payment – £60.00 Deposit</CardTitle>
+          <CardTitle className="text-lg">Payment – {DEPOSIT_DISPLAY} Deposit</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <PaymentElement
@@ -395,7 +416,7 @@ function CheckoutForm() {
           disabled={!stripe || !elements || !agreeToTerms || isSubmitting}
           className="w-full sm:w-auto"
         >
-          {isSubmitting ? "Processing..." : "Pay £60.00 & Confirm Booking"}
+          {isSubmitting ? "Processing..." : `Pay ${DEPOSIT_DISPLAY} Deposit & Confirm`}
         </Button>
         <Button
           type="button"
