@@ -21,17 +21,20 @@ export function BoilerTrusted({ onGetQuote }: BoilerTrustedProps) {
               Hey Electrics — Trusted Nationwide for Boiler Servicing
             </h2>
             <p className="text-muted-text leading-relaxed text-lg">
-              A well-maintained boiler is key to a safe and efficient home. At
-              Hey Electrics, our Gas Safe registered engineers deliver thorough
-              boiler services for homeowners and landlords across the UK, giving
-              you confidence that your heating system is running safely and
-              reliably.
+              With thousands of heating systems failing each year due to lack of
+              maintenance, regular boiler servicing is essential for safety,
+              efficiency, and long-term performance.
             </p>
             <p className="text-muted-text leading-relaxed text-lg">
-              We guarantee a transparent, fairly-priced, and friendly service
-              with the flexibility to fit your schedule. Our comprehensive
-              inspections detect potential issues early, helping you avoid costly
-              breakdowns and keeping your household warm all year round.
+              At Hey Electrics, we provide professional, reliable boiler
+              servicing for homeowners and landlords across the UK. Our
+              qualified engineers ensure your system is operating safely,
+              helping you avoid costly breakdowns and keeping your property warm
+              and protected.
+            </p>
+            <p className="text-muted-text leading-relaxed text-lg">
+              We pride ourselves on transparent pricing, flexible scheduling,
+              and a friendly, professional service you can rely on.
             </p>
             <Button onClick={onGetQuote} className="w-fit">
               Book Your £99 Boiler Service

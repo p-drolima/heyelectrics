@@ -3,19 +3,19 @@ import { Button } from "@/components/ui/button";
 
 const PROPERTY_TYPES = [
   {
-    title: "Residential",
+    title: "Residential Boiler Servicing",
     description:
-      "Keep your home warm and safe with an annual boiler service. Our Gas Safe engineers carry out a comprehensive inspection of your boiler, ensuring it operates efficiently and meets all current safety standards. Ideal for homeowners who want peace of mind.",
+      "Ensure your home stays warm and safe with a professional boiler service. We inspect all key components, identify potential issues early, and help improve efficiency to reduce energy bills.",
   },
   {
-    title: "Landlord",
+    title: "Landlord Boiler Servicing",
     description:
-      "Stay compliant with your legal obligations as a landlord. We provide annual boiler services and Gas Safety Certificates (CP12) to keep your rental properties safe for tenants, helping you meet all regulatory requirements with minimal hassle.",
+      "Stay compliant and protect your tenants with annual servicing. We provide reliable inspections and can support with ongoing maintenance plans across multiple properties.",
   },
   {
-    title: "Commercial",
+    title: "Commercial Boiler Servicing",
     description:
-      "Protect your business premises with professional boiler servicing. From offices and shops to restaurants and warehouses, our engineers ensure your commercial heating systems run reliably and efficiently, minimising downtime and keeping your team comfortable.",
+      "From offices to retail spaces, we service commercial heating systems to ensure safe operation, minimise downtime, and maintain efficiency across your business premises.",
   },
 ];
 

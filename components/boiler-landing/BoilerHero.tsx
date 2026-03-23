@@ -67,7 +67,7 @@ export function BoilerHero() {
             <Card className="rounded-[15px] shadow-xl border-0 overflow-hidden bg-white">
               <CardHeader className="pb-4">
                 <CardTitle className="text-xl font-bold text-black font-display">
-                  Select your fuel type below:
+                  Book Your Boiler Service Today
                 </CardTitle>
               </CardHeader>
               <CardContent>

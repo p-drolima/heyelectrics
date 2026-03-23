@@ -4,18 +4,33 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-const BULLET_POINTS = [
+const EICR_BULLETS = [
   "Flexible Availability & Nationwide Service",
   "EICR For Domestic & Commercial Properties",
   "EICR for Home Buyers & Sellers",
   "EICR for Landlords",
 ];
 
+const BOILER_BULLETS = [
+  "Fixed £99 Price",
+  "Fast & Flexible Booking",
+  "Qualified Engineers",
+  "Nationwide Coverage",
+];
+
 interface FooterProps {
   onGetQuote?: () => void;
+  serviceType?: "eicr" | "boiler";
 }
 
-export function Footer({ onGetQuote }: FooterProps) {
+export function Footer({ onGetQuote, serviceType = "eicr" }: FooterProps) {
+  const isBoiler = serviceType === "boiler";
+  const bullets = isBoiler ? BOILER_BULLETS : EICR_BULLETS;
+  const title = isBoiler
+    ? "Book Your Boiler Service Today"
+    : "Ensure Electrical Safety Today with Professional EICR Services";
+  const ctaText = isBoiler ? "Book Now" : "Get your quote";
+
   return (
     <footer>
       <section className="px-4 sm:px-6 lg:px-8 py-4">
@@ -28,10 +43,10 @@ export function Footer({ onGetQuote }: FooterProps) {
           >
             <div className="flex-1">
               <h2 className="text-2xl md:text-3xl font-bold text-black mb-6 font-display">
-                Ensure Electrical Safety Today with Professional EICR Services
+                {title}
               </h2>
               <ul className="space-y-3">
-                {BULLET_POINTS.map((point) => (
+                {bullets.map((point) => (
                   <li
                     key={point}
                     className="flex items-center gap-3 text-black text-base md:text-lg"
@@ -52,7 +67,7 @@ export function Footer({ onGetQuote }: FooterProps) {
                 size="lg"
                 className="w-full lg:w-auto"
               >
-                Get your quote
+                {ctaText}
               </Button>
               <Button
                 asChild

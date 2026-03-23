@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 
 const BULLET_POINTS = [
   "Boiler Servicing for Landlords",
-  "Homeowners",
+  "Boiler Servicing for Homeowners",
   "Domestic & Commercial Systems Covered",
-  "Flexible Appointments",
+  "Flexible Appointments Available",
 ];
 
 interface BoilerServicesProps {
@@ -57,7 +57,7 @@ export function BoilerServices({ onGetQuote }: BoilerServicesProps) {
               size="lg"
               className="w-full lg:w-auto border-white text-white hover:bg-white hover:text-[#4EB4DA] bg-transparent"
             >
-              <a href="tel:01615660197">0161 566 0197</a>
+              <a href="tel:01615660197">Call Hey Electrics</a>
             </Button>
           </div>
         </div>

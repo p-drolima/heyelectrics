@@ -11,27 +11,27 @@ const FAQ_ITEMS = [
   {
     question: "What is a boiler service?",
     answer:
-      "A boiler service is a thorough inspection carried out by a Gas Safe registered engineer to check that your boiler is operating safely and efficiently. It involves examining all key components, testing for gas leaks, checking the flue and ventilation, and ensuring the boiler meets current safety standards.",
+      "A boiler service is a thorough inspection carried out by a qualified engineer to ensure your boiler is operating safely and efficiently. It includes checking key components, identifying wear and tear, and confirming everything is working as it should.",
   },
   {
     question: "How often should I service my boiler?",
     answer:
-      "It is recommended that you have your boiler serviced at least once a year. Annual servicing helps prevent breakdowns, maintains energy efficiency, and ensures the safety of your household. For landlords, an annual gas safety check is a legal requirement.",
+      "It’s recommended to service your boiler annually to maintain efficiency, ensure safety, and comply with manufacturer warranties.",
   },
   {
     question: "What does a boiler service include?",
     answer:
-      "A typical boiler service includes a visual inspection of the boiler and controls, checking the flue and combustion releases, testing gas pressure and flow, inspecting key internal components for wear and corrosion, and ensuring the boiler operates efficiently and safely. You\u2019ll receive a full report detailing any findings and recommendations.",
+      "A typical service includes a visual inspection of the boiler and controls, checks for leaks, corrosion and wear, testing gas pressure and flow, flue and ventilation checks, and safety device testing.",
   },
   {
     question: "How long does a boiler service take?",
     answer:
-      "A standard boiler service usually takes between 30 minutes and an hour, depending on the type and condition of your boiler. Our engineers will ensure a thorough job without unnecessary delays.",
+      "Most boiler services take between 30 and 60 minutes, depending on the system and accessibility.",
   },
   {
     question: "Do landlords need to service boilers?",
     answer:
-      "Yes. Landlords are legally required to have all gas appliances, including boilers, checked annually by a Gas Safe registered engineer. A valid Gas Safety Certificate (CP12) must be provided to tenants within 28 days of the check, and records must be kept for at least two years.",
+      "Yes. Landlords are responsible for ensuring gas appliances are safe, which usually includes annual checks and the relevant gas safety documentation where required.",
   },
 ];
 

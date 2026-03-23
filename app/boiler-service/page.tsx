@@ -30,7 +30,7 @@ export default function BoilerServicePage() {
         <BoilerFAQ />
         <BoilerPropertyTypes onGetQuote={openQuoteModal} />
       </main>
-      <Footer onGetQuote={openQuoteModal} />
+      <Footer onGetQuote={openQuoteModal} serviceType="boiler" />
       <BoilerQuoteModal
         isOpen={quoteModalOpen}
         onClose={() => setQuoteModalOpen(false)}

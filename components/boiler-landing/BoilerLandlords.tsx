@@ -29,14 +29,18 @@ export function BoilerLandlords({ onGetQuote }: BoilerLandlordsProps) {
               Boiler Servicing for Landlords &amp; Homeowners
             </h2>
             <p className="text-muted-text leading-relaxed text-lg">
-              Whether you&apos;re a landlord managing a portfolio of rental
-              properties or a homeowner wanting peace of mind, regular boiler
-              servicing is essential. Our experienced Gas Safe engineers provide
-              a comprehensive service that keeps your heating system running
-              efficiently and safely.
+              Keeping your boiler regularly serviced isn&rsquo;t just recommended -
+              it&rsquo;s essential for safety, efficiency, and compliance.
             </p>
             <p className="text-muted-text leading-relaxed text-lg">
-              An annual boiler service helps you:
+              Our experienced engineers provide high-quality boiler servicing
+              for all property types, from single homes to large rental
+              portfolios. Whether you&rsquo;re a homeowner looking for peace of mind
+              or a landlord meeting your responsibilities, we deliver a
+              dependable and professional service every time.
+            </p>
+            <p className="text-muted-text leading-relaxed text-lg">
+              A regular boiler service helps:
             </p>
             <ul className="space-y-3">
               {USP_ITEMS.map((item) => (
@@ -51,6 +55,10 @@ export function BoilerLandlords({ onGetQuote }: BoilerLandlordsProps) {
                 </li>
               ))}
             </ul>
+            <p className="text-muted-text leading-relaxed text-lg">
+              Don&rsquo;t wait for problems to arise - book your service today and
+              keep your heating system running at its best.
+            </p>
             <Button onClick={onGetQuote} className="w-fit">
               Book Your Boiler Service
             </Button>

@@ -114,9 +114,7 @@ export function BoilerQuoteForm({
           htmlFor={consentId}
           className="text-sm text-muted-text cursor-pointer leading-snug"
         >
-          {previouslyConsented
-            ? "Privacy policy and terms previously accepted"
-            : "Yes, I agree with the privacy policy and terms and conditions."}
+          Yes, I agree with the privacy policy and terms and conditions
         </label>
       </div>
 
@@ -125,7 +123,7 @@ export function BoilerQuoteForm({
         disabled={!isReady}
         className="w-full py-6 text-base font-semibold"
       >
-        Get Your Quote
+        Book My Service
       </Button>
     </div>
   );

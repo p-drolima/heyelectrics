@@ -13,14 +13,14 @@ const steps = [
   {
     number: 2,
     icon: Wrench,
-    title: "Engineer Visit",
+    title: "Engineer Visit at Your Convenience",
     description:
       "A Gas Safe registered engineer will attend your property, carry out a full boiler inspection, and ensure everything is working safely and efficiently.",
   },
   {
     number: 3,
     icon: ShieldCheck,
-    title: "Service Complete",
+    title: "Service Complete & Peace of Mind",
     description:
       "We\u2019ll confirm your boiler is operating safely, highlight any issues, and provide recommendations to keep your system running smoothly all year round.",
   },
