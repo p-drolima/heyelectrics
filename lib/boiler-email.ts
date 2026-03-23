@@ -142,7 +142,7 @@ export async function sendBoilerBookingEmails(data: BoilerBookingEmailData) {
       maxPerDay: MAX_BOOKINGS_PER_DAY,
       sameDayBookings,
     });
-    sendEmail(adminRecipients, admin.subject, admin.html);
+    await sendEmail(adminRecipients, admin.subject, admin.html);
   }
 
   const customer = customerBoilerBookingEmail({
@@ -156,7 +156,7 @@ export async function sendBoilerBookingEmails(data: BoilerBookingEmailData) {
     bookingDate: data.bookingDate,
     depositPaid: data.depositPaid ?? false,
   });
-  sendEmail(
+  await sendEmail(
     { email: data.email, name: data.fullName },
     customer.subject,
     customer.html
@@ -180,14 +180,14 @@ export async function sendBoilerEnquiryEmails(data: BoilerEnquiryEmailData) {
 
   if (adminRecipients.length > 0) {
     const admin = adminBoilerEnquiryEmail(data);
-    sendEmail(adminRecipients, admin.subject, admin.html);
+    await sendEmail(adminRecipients, admin.subject, admin.html);
   }
 
   const customer = customerBoilerEnquiryEmail({
     fullName: data.fullName,
     enquiryType: data.enquiryType,
   });
-  sendEmail(
+  await sendEmail(
     { email: data.email, name: data.fullName },
     customer.subject,
     customer.html

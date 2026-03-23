@@ -105,7 +105,7 @@ export async function POST(request: Request) {
         );
     }
 
-    sendBoilerBookingEmails({
+    await sendBoilerBookingEmails({
       bookingReference: ref,
       propertyType: String(propertyType),
       propertySubtype: propertySubtype || null,

@@ -42,8 +42,7 @@ export async function POST(request: Request) {
       })
       .returning();
 
-    // Fire-and-forget: send emails without blocking the response
-    sendEnquiryEmails({
+    await sendEnquiryEmails({
       enquiryType,
       fullName: String(fullName),
       companyName: companyName || null,

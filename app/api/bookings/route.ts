@@ -102,7 +102,7 @@ export async function POST(request: Request) {
         .catch((err) => console.error("Failed to release reservation:", err));
     }
 
-    sendBookingEmails({
+    await sendBookingEmails({
       bookingReference: ref,
       propertyType: String(propertyType),
       propertySubtype: propertySubtype || null,

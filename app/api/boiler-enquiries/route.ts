@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       })
       .returning();
 
-    sendBoilerEnquiryEmails({
+    await sendBoilerEnquiryEmails({
       enquiryType,
       fullName: String(fullName),
       companyName: companyName || null,

@@ -133,10 +133,9 @@ export async function sendBookingEmails(data: BookingEmailData) {
       maxPerDay: MAX_BOOKINGS_PER_DAY,
       sameDayBookings,
     });
-    sendEmail(adminRecipients, admin.subject, admin.html);
+    await sendEmail(adminRecipients, admin.subject, admin.html);
   }
 
-  // Customer confirmation
   const customer = customerBookingEmail({
     bookingReference: data.bookingReference,
     fullName: data.fullName,
@@ -148,7 +147,7 @@ export async function sendBookingEmails(data: BookingEmailData) {
     bookingDate: data.bookingDate,
     depositPaid: data.depositPaid ?? false,
   });
-  sendEmail({ email: data.email, name: data.fullName }, customer.subject, customer.html);
+  await sendEmail({ email: data.email, name: data.fullName }, customer.subject, customer.html);
 }
 
 export interface EnquiryEmailData {
@@ -167,13 +166,12 @@ export async function sendEnquiryEmails(data: EnquiryEmailData) {
 
   if (adminRecipients.length > 0) {
     const admin = adminEnquiryEmail(data);
-    sendEmail(adminRecipients, admin.subject, admin.html);
+    await sendEmail(adminRecipients, admin.subject, admin.html);
   }
 
-  // Customer confirmation
   const customer = customerEnquiryEmail({
     fullName: data.fullName,
     enquiryType: data.enquiryType,
   });
-  sendEmail({ email: data.email, name: data.fullName }, customer.subject, customer.html);
+  await sendEmail({ email: data.email, name: data.fullName }, customer.subject, customer.html);
 }
