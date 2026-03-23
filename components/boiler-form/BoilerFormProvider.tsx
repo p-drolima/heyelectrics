@@ -188,15 +188,14 @@ export function BoilerFormProvider({
         const switched: FormData = {
           ...initialFormData,
           fuelType: initialFuelType,
-          boilerWorks: true,
           fullName: restoredData.fullName,
           companyName: restoredData.companyName,
           email: restoredData.email,
           phone: restoredData.phone,
         };
         setFormData(switched);
-        setCurrentStepState("boiler-property-type");
-        setStepHistory(["boiler-status", "boiler-property-type"]);
+        setCurrentStepState("boiler-status");
+        setStepHistory(["boiler-status"]);
       } else {
         if (initialFuelType) {
           restoredData.fuelType = initialFuelType;
@@ -223,10 +222,9 @@ export function BoilerFormProvider({
       setFormData((prev) => ({
         ...prev,
         fuelType: initialFuelType,
-        boilerWorks: true,
       }));
-      setCurrentStepState("boiler-property-type");
-      setStepHistory(["boiler-status", "boiler-property-type"]);
+      setCurrentStepState("boiler-status");
+      setStepHistory(["boiler-status"]);
     }
 
     setHydrated(true);
