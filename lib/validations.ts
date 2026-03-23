@@ -82,3 +82,45 @@ export type LargeProperty = z.infer<typeof largePropertySchema>;
 export type Address = z.infer<typeof addressSchema>;
 export type Calendar = z.infer<typeof calendarSchema>;
 export type Payment = z.infer<typeof paymentSchema>;
+
+// ── Boiler Service Validations ──────────────────────────────────────
+
+export const fuelTypes = ["Gas", "LPG", "Oil"] as const;
+
+export const boilerPropertySubtypes = [
+  "Mid Terraced House",
+  "End Terraced / Semi Detached House",
+  "Detached House",
+  "Detached Bungalow",
+  "Semi Detached Bungalow",
+  "Flat / Maisonette",
+  "Other",
+] as const;
+
+export const boilerDetailsSchema = z.object({
+  propertySubtype: z.enum(boilerPropertySubtypes, {
+    message: "Please select a property type",
+  }),
+  fullName: z.string().min(2, "Full name is required"),
+  companyName: z.string().optional(),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z
+    .string()
+    .min(10, "Please enter a valid phone number")
+    .regex(/^[\d\s+()-]+$/, "Please enter a valid phone number"),
+  postcode: z.string().min(3, "Please enter a postcode"),
+});
+
+export const brokenBoilerEnquirySchema = z.object({
+  fullName: z.string().min(2, "Full name is required"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z
+    .string()
+    .min(10, "Please enter a valid phone number")
+    .regex(/^[\d\s+()-]+$/, "Please enter a valid phone number"),
+  postcode: z.string().min(3, "Please enter a postcode"),
+  address: z.string().optional(),
+});
+
+export type BoilerDetails = z.infer<typeof boilerDetailsSchema>;
+export type BrokenBoilerEnquiry = z.infer<typeof brokenBoilerEnquirySchema>;

@@ -12,6 +12,9 @@ import {
 
 export const bookings = pgTable("bookings", {
   id: bigserial("id", { mode: "number" }).primaryKey(),
+  serviceType: varchar("service_type", { length: 50 }).default("eicr"),
+  fuelType: varchar("fuel_type", { length: 50 }),
+  boilerWorks: boolean("boiler_works"),
   bookingReference: varchar("booking_reference", { length: 20 })
     .notNull()
     .unique(),
@@ -43,6 +46,7 @@ export const bookings = pgTable("bookings", {
 
 export const slotReservations = pgTable("slot_reservations", {
   id: bigserial("id", { mode: "number" }).primaryKey(),
+  serviceType: varchar("service_type", { length: 50 }).default("eicr"),
   bookingDate: date("booking_date").notNull(),
   sessionToken: varchar("session_token", { length: 64 }).notNull().unique(),
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
@@ -51,6 +55,7 @@ export const slotReservations = pgTable("slot_reservations", {
 
 export const enquiries = pgTable("enquiries", {
   id: bigserial("id", { mode: "number" }).primaryKey(),
+  serviceType: varchar("service_type", { length: 50 }).default("eicr"),
   enquiryType: varchar("enquiry_type", { length: 50 })
     .notNull()
     .default("commercial"),
