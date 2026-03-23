@@ -25,7 +25,7 @@ function getMailjetClient() {
 }
 
 async function sendEmail(
-  to: { email: string; name?: string },
+  to: { email: string; name?: string } | { email: string; name?: string }[],
   subject: string,
   htmlContent: string
 ) {
@@ -34,13 +34,14 @@ async function sendEmail(
 
   const fromEmail = process.env.FROM_EMAIL || "noreply@heyelectrics.co.uk";
   const fromName = process.env.FROM_NAME || "Hey Electrics";
+  const recipients = Array.isArray(to) ? to : [to];
 
   try {
     await client.post("send", { version: "v3.1" }).request({
       Messages: [
         {
           From: { Email: fromEmail, Name: fromName },
-          To: [{ Email: to.email, Name: to.name || to.email }],
+          To: recipients.map((r) => ({ Email: r.email, Name: r.name || r.email })),
           Subject: subject,
           HTMLPart: htmlContent,
         },
@@ -49,6 +50,16 @@ async function sendEmail(
   } catch (error) {
     console.error("Failed to send email:", error);
   }
+}
+
+function getAdminRecipients(): { email: string; name: string }[] {
+  const adminName = process.env.ADMIN_NAME || "Hey Electrics Admin";
+  const csv = process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "";
+  return csv
+    .split(",")
+    .map((e) => e.trim())
+    .filter(Boolean)
+    .map((email) => ({ email, name: adminName }));
 }
 
 async function getSameDayBoilerBookings(
@@ -118,25 +129,20 @@ export interface BoilerBookingEmailData {
 }
 
 export async function sendBoilerBookingEmails(data: BoilerBookingEmailData) {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminName = process.env.ADMIN_NAME || "Hey Electrics Admin";
+  const adminRecipients = getAdminRecipients();
 
   const sameDayBookings = data.bookingDate
     ? await getSameDayBoilerBookings(data.bookingDate)
     : [];
 
-  if (adminEmail) {
+  if (adminRecipients.length > 0) {
     const admin = adminBoilerBookingEmail({
       ...data,
       sameDayCount: sameDayBookings.length,
       maxPerDay: MAX_BOOKINGS_PER_DAY,
       sameDayBookings,
     });
-    sendEmail(
-      { email: adminEmail, name: adminName },
-      admin.subject,
-      admin.html
-    );
+    sendEmail(adminRecipients, admin.subject, admin.html);
   }
 
   const customer = customerBoilerBookingEmail({
@@ -170,16 +176,11 @@ export interface BoilerEnquiryEmailData {
 }
 
 export async function sendBoilerEnquiryEmails(data: BoilerEnquiryEmailData) {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminName = process.env.ADMIN_NAME || "Hey Electrics Admin";
+  const adminRecipients = getAdminRecipients();
 
-  if (adminEmail) {
+  if (adminRecipients.length > 0) {
     const admin = adminBoilerEnquiryEmail(data);
-    sendEmail(
-      { email: adminEmail, name: adminName },
-      admin.subject,
-      admin.html
-    );
+    sendEmail(adminRecipients, admin.subject, admin.html);
   }
 
   const customer = customerBoilerEnquiryEmail({
