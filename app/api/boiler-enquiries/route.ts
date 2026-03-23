@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { enquiries } from "@/lib/db/schema";
-import { sendEnquiryEmails } from "@/lib/email";
+import { sendBoilerEnquiryEmails } from "@/lib/boiler-email";
 
 export async function POST(request: Request) {
   try {
@@ -12,14 +12,13 @@ export async function POST(request: Request) {
       companyName,
       email,
       phone,
+      fuelType,
       postcode,
       address,
       message,
     } = body;
 
-    const enquiryType =
-      enquiry_type ||
-      (body.propertyType === "commercial" ? "commercial" : "general");
+    const enquiryType = enquiry_type || "broken_boiler";
 
     if (!fullName || !email || !phone) {
       return NextResponse.json(
@@ -31,6 +30,7 @@ export async function POST(request: Request) {
     const [row] = await db
       .insert(enquiries)
       .values({
+        serviceType: "boiler",
         enquiryType,
         fullName: String(fullName),
         companyName: companyName ? String(companyName) : null,
@@ -42,23 +42,24 @@ export async function POST(request: Request) {
       })
       .returning();
 
-    await sendEnquiryEmails({
+    await sendBoilerEnquiryEmails({
       enquiryType,
       fullName: String(fullName),
       companyName: companyName || null,
       email: String(email),
       phone: String(phone),
+      fuelType: fuelType || null,
       postcode: postcode || null,
       address: address || null,
       message: message || null,
-    }).catch((err) => console.error("Email send failed:", err));
+    }).catch((err: unknown) => console.error("Email send failed:", err));
 
     return NextResponse.json({
       id: row?.id,
       message: "Enquiry submitted successfully",
     });
   } catch (error) {
-    console.error("Enquiry error:", error);
+    console.error("Boiler enquiry error:", error);
     return NextResponse.json(
       { message: "Failed to submit enquiry" },
       { status: 500 }

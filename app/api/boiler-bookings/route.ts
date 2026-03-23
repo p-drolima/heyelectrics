@@ -3,8 +3,7 @@ import { eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { bookings, slotReservations } from "@/lib/db/schema";
 import { generateBookingReference } from "@/lib/utils";
-import { sendBookingEmails } from "@/lib/email";
-import { DEPOSIT_PENCE } from "@/lib/pricing";
+import { sendBoilerBookingEmails } from "@/lib/boiler-email";
 
 const MAX_BOOKINGS_PER_DAY = 7;
 
@@ -24,8 +23,10 @@ export async function POST(request: Request) {
       county,
       bedrooms,
       bookingDate,
+      fuelType,
+      boilerWorks,
       stripePaymentIntentId,
-      depositPaid,
+      fullPaymentPaid,
       reservationToken,
     } = body;
 
@@ -40,7 +41,6 @@ export async function POST(request: Request) {
       ? new Date(bookingDate).toISOString().split("T")[0]
       : null;
 
-    // Server-side availability guard (only count confirmed bookings -- the user's own reservation is valid)
     if (normalizedDate) {
       const [{ count }] = await db
         .select({ count: sql<number>`count(*)` })
@@ -64,6 +64,9 @@ export async function POST(request: Request) {
       .insert(bookings)
       .values({
         bookingReference,
+        serviceType: "boiler",
+        fuelType: fuelType ? String(fuelType) : null,
+        boilerWorks: boilerWorks === true,
         propertyType: String(propertyType),
         propertySubtype: propertySubtype ? String(propertySubtype) : null,
         fullName: String(fullName),
@@ -77,32 +80,32 @@ export async function POST(request: Request) {
         county: county ? String(county) : null,
         bedrooms: bedrooms != null ? Number(bedrooms) : null,
         bookingDate: normalizedDate,
-        depositPaid: depositPaid === true,
-        depositAmount: (DEPOSIT_PENCE / 100).toFixed(2),
+        depositPaid: fullPaymentPaid === true,
+        depositAmount: "99.00",
         stripePaymentIntentId: stripePaymentIntentId
           ? String(stripePaymentIntentId)
           : null,
-        status: depositPaid ? "confirmed" : "pending",
+        status: fullPaymentPaid ? "confirmed" : "pending",
       })
       .returning();
 
     const ref = row?.bookingReference ?? bookingReference;
 
-    // Check if this is a returning customer (has previous bookings with same email)
     const [{ count: prevCount }] = await db
       .select({ count: sql<number>`count(*)` })
       .from(bookings)
       .where(eq(bookings.email, String(email)));
     const isNewCustomer = Number(prevCount) <= 1;
 
-    // Release the slot reservation now that the booking is confirmed
     if (reservationToken) {
       db.delete(slotReservations)
         .where(eq(slotReservations.sessionToken, String(reservationToken)))
-        .catch((err) => console.error("Failed to release reservation:", err));
+        .catch((err: unknown) =>
+          console.error("Failed to release reservation:", err)
+        );
     }
 
-    await sendBookingEmails({
+    await sendBoilerBookingEmails({
       bookingReference: ref,
       propertyType: String(propertyType),
       propertySubtype: propertySubtype || null,
@@ -116,10 +119,12 @@ export async function POST(request: Request) {
       city: city || null,
       county: county || null,
       bedrooms: bedrooms != null ? Number(bedrooms) : null,
+      fuelType: fuelType || null,
+      boilerWorks: boilerWorks === true,
       bookingDate: normalizedDate,
-      depositPaid: depositPaid === true,
+      depositPaid: fullPaymentPaid === true,
       stripePaymentIntentId: stripePaymentIntentId || null,
-    }).catch((err) => console.error("Email send failed:", err));
+    }).catch((err: unknown) => console.error("Email send failed:", err));
 
     return NextResponse.json({
       bookingReference: ref,
@@ -127,7 +132,7 @@ export async function POST(request: Request) {
       isNewCustomer,
     });
   } catch (error) {
-    console.error("Booking error:", error);
+    console.error("Boiler booking error:", error);
     return NextResponse.json(
       { message: "Failed to create booking" },
       { status: 500 }

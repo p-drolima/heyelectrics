@@ -1,14 +1,14 @@
 import Mailjet from "node-mailjet";
 import {
-  adminBookingEmail,
-  adminEnquiryEmail,
-  customerBookingEmail,
-  customerEnquiryEmail,
-} from "./email-templates";
-import type { SameDayBooking } from "./email-templates";
+  adminBoilerBookingEmail,
+  adminBoilerEnquiryEmail,
+  customerBoilerBookingEmail,
+  customerBoilerEnquiryEmail,
+} from "./boiler-email-templates";
+import type { SameDayBoilerBooking } from "./boiler-email-templates";
 import { db } from "./db";
 import { bookings } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 const MAX_BOOKINGS_PER_DAY = 7;
 
@@ -62,7 +62,9 @@ function getAdminRecipients(): { email: string; name: string }[] {
     .map((email) => ({ email, name: adminName }));
 }
 
-async function getSameDayBookings(date: string): Promise<SameDayBooking[]> {
+async function getSameDayBoilerBookings(
+  date: string
+): Promise<SameDayBoilerBooking[]> {
   try {
     const dateOnly = date.split("T")[0];
     const rows = await db
@@ -72,14 +74,19 @@ async function getSameDayBookings(date: string): Promise<SameDayBooking[]> {
         postcode: bookings.postcode,
         addressLine1: bookings.addressLine1,
         city: bookings.city,
-        propertySubtype: bookings.propertySubtype,
+        fuelType: bookings.fuelType,
         bedrooms: bookings.bedrooms,
         depositPaid: bookings.depositPaid,
         status: bookings.status,
         createdAt: bookings.createdAt,
       })
       .from(bookings)
-      .where(eq(bookings.bookingDate, dateOnly));
+      .where(
+        and(
+          eq(bookings.bookingDate, dateOnly),
+          eq(bookings.serviceType, "boiler")
+        )
+      );
 
     return rows.map((r) => ({
       bookingReference: r.bookingReference,
@@ -87,7 +94,7 @@ async function getSameDayBookings(date: string): Promise<SameDayBooking[]> {
       postcode: r.postcode,
       addressLine1: r.addressLine1,
       city: r.city,
-      propertySubtype: r.propertySubtype,
+      fuelType: r.fuelType,
       bedrooms: r.bedrooms,
       depositPaid: r.depositPaid ?? false,
       status: r.status ?? "pending",
@@ -100,7 +107,7 @@ async function getSameDayBookings(date: string): Promise<SameDayBooking[]> {
 
 // ── Public API ──────────────────────────────────────────────────────
 
-export interface BookingEmailData {
+export interface BoilerBookingEmailData {
   bookingReference: string;
   propertyType: string;
   propertySubtype?: string | null;
@@ -114,20 +121,22 @@ export interface BookingEmailData {
   city?: string | null;
   county?: string | null;
   bedrooms?: number | null;
+  fuelType?: string | null;
+  boilerWorks?: boolean | null;
   bookingDate?: string | null;
   depositPaid?: boolean;
   stripePaymentIntentId?: string | null;
 }
 
-export async function sendBookingEmails(data: BookingEmailData) {
+export async function sendBoilerBookingEmails(data: BoilerBookingEmailData) {
   const adminRecipients = getAdminRecipients();
 
   const sameDayBookings = data.bookingDate
-    ? await getSameDayBookings(data.bookingDate)
+    ? await getSameDayBoilerBookings(data.bookingDate)
     : [];
 
   if (adminRecipients.length > 0) {
-    const admin = adminBookingEmail({
+    const admin = adminBoilerBookingEmail({
       ...data,
       sameDayCount: sameDayBookings.length,
       maxPerDay: MAX_BOOKINGS_PER_DAY,
@@ -136,7 +145,7 @@ export async function sendBookingEmails(data: BookingEmailData) {
     await sendEmail(adminRecipients, admin.subject, admin.html);
   }
 
-  const customer = customerBookingEmail({
+  const customer = customerBoilerBookingEmail({
     bookingReference: data.bookingReference,
     fullName: data.fullName,
     propertySubtype: data.propertySubtype,
@@ -147,31 +156,40 @@ export async function sendBookingEmails(data: BookingEmailData) {
     bookingDate: data.bookingDate,
     depositPaid: data.depositPaid ?? false,
   });
-  await sendEmail({ email: data.email, name: data.fullName }, customer.subject, customer.html);
+  await sendEmail(
+    { email: data.email, name: data.fullName },
+    customer.subject,
+    customer.html
+  );
 }
 
-export interface EnquiryEmailData {
+export interface BoilerEnquiryEmailData {
   enquiryType: string;
   fullName: string;
   companyName?: string | null;
   email: string;
   phone: string;
+  fuelType?: string | null;
   postcode?: string | null;
   address?: string | null;
   message?: string | null;
 }
 
-export async function sendEnquiryEmails(data: EnquiryEmailData) {
+export async function sendBoilerEnquiryEmails(data: BoilerEnquiryEmailData) {
   const adminRecipients = getAdminRecipients();
 
   if (adminRecipients.length > 0) {
-    const admin = adminEnquiryEmail(data);
+    const admin = adminBoilerEnquiryEmail(data);
     await sendEmail(adminRecipients, admin.subject, admin.html);
   }
 
-  const customer = customerEnquiryEmail({
+  const customer = customerBoilerEnquiryEmail({
     fullName: data.fullName,
     enquiryType: data.enquiryType,
   });
-  await sendEmail({ email: data.email, name: data.fullName }, customer.subject, customer.html);
+  await sendEmail(
+    { email: data.email, name: data.fullName },
+    customer.subject,
+    customer.html
+  );
 }
