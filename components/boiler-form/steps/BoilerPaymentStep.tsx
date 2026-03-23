@@ -279,7 +279,7 @@ function BoilerCheckoutForm() {
           body: JSON.stringify({
             ...submitData,
             stripePaymentIntentId: paymentIntent.id,
-            fullPayment: true,
+            fullPaymentPaid: true,
             reservationToken,
           }),
         });
