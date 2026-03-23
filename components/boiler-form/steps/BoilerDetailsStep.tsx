@@ -17,7 +17,6 @@ const contactSchema = z.object({
     .string()
     .min(10, "Please enter a valid phone number")
     .regex(/^[\d\s+()-]+$/, "Please enter a valid phone number"),
-  postcode: z.string().min(3, "Please enter a postcode"),
 });
 
 type ContactDetails = z.infer<typeof contactSchema>;
@@ -37,7 +36,6 @@ export function BoilerDetailsStep() {
       companyName: formData.companyName || "",
       email: formData.email || "",
       phone: formData.phone || "",
-      postcode: formData.postcode || "",
     },
   });
 
@@ -47,7 +45,6 @@ export function BoilerDetailsStep() {
       companyName: data.companyName ?? "",
       email: data.email,
       phone: data.phone,
-      postcode: data.postcode,
     });
     setCurrentStep("boiler-bedrooms");
   };
@@ -104,17 +101,6 @@ export function BoilerDetailsStep() {
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="postcode">Postcode *</Label>
-          <Input
-            id="postcode"
-            {...register("postcode")}
-            placeholder="SW1A 1AA"
-          />
-          {errors.postcode && (
-            <p className="text-sm text-red-500">{errors.postcode.message}</p>
-          )}
-        </div>
       </div>
 
       <FormActions>

@@ -2,18 +2,24 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  residentialDetailsSchema,
-  type ResidentialDetails,
-  propertySubtypes,
-} from "@/lib/validations";
+import { z } from "zod";
 import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
 import { FormActions } from "@/components/form/FormActions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { Controller } from "react-hook-form";
+
+const contactDetailsSchema = z.object({
+  fullName: z.string().min(2, "Full name is required"),
+  companyName: z.string().optional(),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z
+    .string()
+    .min(10, "Please enter a valid phone number")
+    .regex(/^[\d\s+()-]+$/, "Please enter a valid phone number"),
+});
+
+type ContactDetails = z.infer<typeof contactDetailsSchema>;
 
 export function ResidentialDetailsStep() {
   const { formData, updateFormData, setCurrentStep, goBack } = useFormContext();
@@ -21,14 +27,10 @@ export function ResidentialDetailsStep() {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
-  } = useForm<ResidentialDetails>({
-    resolver: zodResolver(residentialDetailsSchema),
+  } = useForm<ContactDetails>({
+    resolver: zodResolver(contactDetailsSchema),
     defaultValues: {
-      propertySubtype: propertySubtypes.includes(formData.propertySubtype as (typeof propertySubtypes)[number])
-        ? (formData.propertySubtype as ResidentialDetails["propertySubtype"])
-        : undefined,
       fullName: formData.fullName || "",
       companyName: formData.companyName || "",
       email: formData.email || "",
@@ -36,9 +38,8 @@ export function ResidentialDetailsStep() {
     },
   });
 
-  const onSubmit = (data: ResidentialDetails) => {
+  const onSubmit = (data: ContactDetails) => {
     updateFormData({
-      propertySubtype: data.propertySubtype,
       fullName: data.fullName,
       companyName: data.companyName ?? "",
       email: data.email,
@@ -50,40 +51,8 @@ export function ResidentialDetailsStep() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       <h2 className="text-2xl font-semibold text-black">
-        Tell us about your property
+        Your contact details
       </h2>
-
-      <div className="space-y-4">
-        <Label>Property type</Label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <Controller
-            name="propertySubtype"
-            control={control}
-            render={({ field }) => (
-              <>
-                {propertySubtypes.map((subtype) => (
-                  <button
-                    key={subtype}
-                    type="button"
-                    onClick={() => field.onChange(subtype)}
-                    className={cn(
-                      "rounded-md border px-4 py-3 text-left text-sm font-medium transition-colors",
-                      field.value === subtype
-                        ? "border-[#44B4D7] bg-[#44B4D7]/10 text-[#44B4D7]"
-                        : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
-                    )}
-                  >
-                    {subtype}
-                  </button>
-                ))}
-              </>
-            )}
-          />
-        </div>
-        {errors.propertySubtype && (
-          <p className="text-sm text-red-500">{errors.propertySubtype.message}</p>
-        )}
-      </div>
 
       <div className="space-y-4">
         <div className="space-y-2">

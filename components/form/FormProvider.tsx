@@ -57,6 +57,7 @@ const initialFormData: FormData = {
 
 export type StepId =
   | "property-type"
+  | "residential-subtype"
   | "residential-details"
   | "commercial-enquiry"
   | "bedrooms"
@@ -66,6 +67,7 @@ export type StepId =
   | "payment";
 
 const RESIDENTIAL_STEPS: StepId[] = [
+  "residential-subtype",
   "residential-details",
   "bedrooms",
   "large-property",
@@ -77,7 +79,7 @@ const RESIDENTIAL_STEPS: StepId[] = [
 const COMMERCIAL_STEPS: StepId[] = ["commercial-enquiry"];
 
 function getFirstStepForType(type: PropertyType): StepId {
-  return type === "commercial" ? "commercial-enquiry" : "residential-details";
+  return type === "commercial" ? "commercial-enquiry" : "residential-subtype";
 }
 
 function isStepValidForType(step: StepId, type: PropertyType): boolean {

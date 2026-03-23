@@ -145,17 +145,22 @@ export function CalendarStep() {
         Choose your preferred date
       </h2>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center relative">
         <Calendar
           mode="single"
           selected={selectedDate}
           onSelect={handleDateSelect}
-          disabled={loading ? [] : disabledDays}
+          disabled={loading ? [() => true] : disabledDays}
           captionLayout="dropdown"
           startMonth={new Date()}
           endMonth={new Date(new Date().getFullYear() + 1, 11)}
-          className={cn("rounded-md border border-gray-200 p-4")}
+          className={cn("rounded-md border border-gray-200 p-4", loading && "opacity-50 pointer-events-none")}
         />
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <p className="text-sm text-muted-text animate-pulse">Loading availability...</p>
+          </div>
+        )}
       </div>
 
       {selectedDate && slots && (
