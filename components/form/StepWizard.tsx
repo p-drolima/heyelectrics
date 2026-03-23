@@ -2,6 +2,7 @@
 
 import { useFormContext, type StepId } from "./FormProvider";
 import { PropertyTypeStep } from "./steps/PropertyTypeStep";
+import { ResidentialSubtypeStep } from "./steps/ResidentialSubtypeStep";
 import { ResidentialDetailsStep } from "./steps/ResidentialDetailsStep";
 import { CommercialEnquiryStep } from "./steps/CommercialEnquiryStep";
 import { BedroomsStep } from "./steps/BedroomsStep";
@@ -14,6 +15,7 @@ import { RotateCcw, Check } from "lucide-react";
 
 const RESIDENTIAL_STEPS: StepId[] = [
   "property-type",
+  "residential-subtype",
   "residential-details",
   "bedrooms",
   "address-finder",
@@ -23,9 +25,10 @@ const RESIDENTIAL_STEPS: StepId[] = [
 
 const stepLabels: Record<StepId, string> = {
   "property-type": "Type",
+  "residential-subtype": "Property",
   "residential-details": "Details",
   "commercial-enquiry": "Enquiry",
-  bedrooms: "Property",
+  bedrooms: "Bedrooms",
   "large-property": "Contact",
   "address-finder": "Address",
   calendar: "Date",
@@ -108,7 +111,7 @@ function StepIndicator() {
                 <div className="flex flex-col items-center gap-2">
                   <div
                     className={cn(
-                      "relative flex items-center justify-center w-10 h-10 rounded-full border-2 text-sm font-semibold transition-all duration-300 font-[family-name:var(--font-display)]",
+                      "relative flex items-center justify-center w-10 h-10 rounded-full border-2 text-sm font-semibold transition-all duration-300 font-display",
                       isCompleted &&
                         "border-[#44B4D7] bg-[#44B4D7] text-white",
                       isCurrent &&
@@ -182,6 +185,7 @@ function StepIndicator() {
 
 const stepComponents: Record<StepId, React.ComponentType> = {
   "property-type": PropertyTypeStep,
+  "residential-subtype": ResidentialSubtypeStep,
   "residential-details": ResidentialDetailsStep,
   "commercial-enquiry": CommercialEnquiryStep,
   bedrooms: BedroomsStep,
