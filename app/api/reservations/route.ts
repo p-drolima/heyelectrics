@@ -3,6 +3,7 @@ import { eq, sql, lt } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { slotReservations, bookings } from "@/lib/db/schema";
 import { randomBytes } from "crypto";
+import { isWeekend } from "@/lib/utils";
 
 const MAX_BOOKINGS_PER_DAY = 7;
 const RESERVATION_MINUTES = 10;
@@ -26,9 +27,21 @@ export async function POST(request: Request) {
       );
     }
 
-    const dateOnly = new Date(bookingDate).toISOString().split("T")[0];
+    const dateOnly = bookingDate.includes("T")
+      ? new Date(bookingDate).toISOString().split("T")[0]
+      : bookingDate;
     const now = new Date();
     console.log("[reservations] Parsed date:", dateOnly);
+
+    if (isWeekend(dateOnly)) {
+      return NextResponse.json(
+        {
+          message: "Bookings are not available on weekends. Please choose a weekday.",
+          code: "WEEKEND_NOT_ALLOWED",
+        },
+        { status: 400 }
+      );
+    }
 
     // Clean up expired reservations for this date
     await db

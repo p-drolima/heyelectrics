@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { bookings, slotReservations } from "@/lib/db/schema";
-import { generateBookingReference } from "@/lib/utils";
+import { generateBookingReference, isWeekend } from "@/lib/utils";
 import { sendBookingEmails } from "@/lib/email";
 import { DEPOSIT_PENCE } from "@/lib/pricing";
 
@@ -37,8 +37,20 @@ export async function POST(request: Request) {
     }
 
     const normalizedDate = bookingDate
-      ? new Date(bookingDate).toISOString().split("T")[0]
+      ? bookingDate.includes("T")
+        ? new Date(bookingDate).toISOString().split("T")[0]
+        : bookingDate
       : null;
+
+    if (normalizedDate && isWeekend(normalizedDate)) {
+      return NextResponse.json(
+        {
+          message: "Bookings are not available on weekends. Please choose a weekday.",
+          code: "WEEKEND_NOT_ALLOWED",
+        },
+        { status: 400 }
+      );
+    }
 
     // Server-side availability guard (only count confirmed bookings -- the user's own reservation is valid)
     if (normalizedDate) {
