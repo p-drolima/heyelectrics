@@ -5,7 +5,7 @@ import { useFormContext } from "../FormProvider";
 import { Button } from "@/components/ui/button";
 import { FormActions } from "@/components/form/FormActions";
 import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+import { cn, toLocalDateString } from "@/lib/utils";
 import type { Matcher } from "react-day-picker";
 
 interface AvailabilityData {
@@ -77,7 +77,7 @@ export function CalendarStep() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          bookingDate: selectedDate.toISOString(),
+          bookingDate: toLocalDateString(selectedDate),
           existingToken: reservationToken,
         }),
       });
@@ -110,7 +110,7 @@ export function CalendarStep() {
 
       setReservationToken(sessionToken);
       setReservationExpiresAt(expiresAt);
-      updateFormData({ bookingDate: selectedDate.toISOString() });
+      updateFormData({ bookingDate: toLocalDateString(selectedDate) });
       setCurrentStep("payment");
     } catch (err) {
       setError(
@@ -131,7 +131,7 @@ export function CalendarStep() {
 
   const getSelectedDateSlots = () => {
     if (!selectedDate) return null;
-    const dateStr = selectedDate.toISOString().split("T")[0];
+    const dateStr = toLocalDateString(selectedDate);
     const booked = availability.dateCounts[dateStr] ?? 0;
     const remaining = availability.maxPerDay - booked;
     return { booked, remaining };

@@ -19,6 +19,21 @@ export function extractOutwardCode(postcode: string): string {
   return cleaned.split(/\d/)[0] || cleaned;
 }
 
+/** Format a Date as YYYY-MM-DD using **local** time (not UTC). */
+export function toLocalDateString(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+/** Returns true if a YYYY-MM-DD string falls on Saturday or Sunday. */
+export function isWeekend(dateStr: string): boolean {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const day = new Date(y, m - 1, d).getDay();
+  return day === 0 || day === 6;
+}
+
 export function formatPostcode(postcode: string): string {
   const cleaned = postcode.replace(/\s+/g, "").toUpperCase();
   if (cleaned.length < 5) return cleaned;
