@@ -116,9 +116,7 @@ export function Footer({ onGetQuote, serviceType = "eicr" }: FooterProps) {
 
           <div className="border-t border-gray-200 pt-6">
             <p className="text-[#828A93] text-xs leading-5 tracking-wide">
-              HEY HOMES GROUP LTD. Legal copy including the address, legal entity,
-              insurance details and company numbers will go here.
-              &copy; Copyright 2026 Hey Homes Group Ltd. All rights reserved.
+              HEY HOMES GROUP LTD. &copy; Copyright 2026 Hey Homes Group Ltd. All rights reserved.
             </p>
           </div>
         </div>

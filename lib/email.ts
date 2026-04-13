@@ -6,6 +6,8 @@ import {
   customerEnquiryEmail,
 } from "./email-templates";
 import type { SameDayBooking } from "./email-templates";
+import { adminPartialBookingEmail } from "./email-templates-partial";
+import type { PartialBookingEmailData } from "./email-templates-partial";
 import { db } from "./db";
 import { bookings } from "./db/schema";
 import { eq } from "drizzle-orm";
@@ -24,7 +26,7 @@ function getMailjetClient() {
   return Mailjet.apiConnect(apiKey, secretKey);
 }
 
-async function sendEmail(
+export async function sendEmail(
   to: { email: string; name?: string } | { email: string; name?: string }[],
   subject: string,
   htmlContent: string
@@ -52,7 +54,7 @@ async function sendEmail(
   }
 }
 
-function getAdminRecipients(): { email: string; name: string }[] {
+export function getAdminRecipients(): { email: string; name: string }[] {
   const adminName = process.env.ADMIN_NAME || "Hey Electrics Admin";
   const csv = process.env.ADMIN_EMAILS || process.env.ADMIN_EMAIL || "";
   return csv
@@ -174,4 +176,12 @@ export async function sendEnquiryEmails(data: EnquiryEmailData) {
     enquiryType: data.enquiryType,
   });
   await sendEmail({ email: data.email, name: data.fullName }, customer.subject, customer.html);
+}
+
+export async function sendPartialBookingEmail(data: PartialBookingEmailData) {
+  const adminRecipients = getAdminRecipients();
+  if (adminRecipients.length === 0) return;
+
+  const email = adminPartialBookingEmail(data);
+  await sendEmail(adminRecipients, email.subject, email.html);
 }

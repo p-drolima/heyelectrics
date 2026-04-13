@@ -33,6 +33,7 @@ export interface FormData {
   bookingDate: string;
   message: string;
   agreeToTerms: boolean;
+  gdprConsent: boolean;
   bookingReference: string;
 }
 
@@ -53,6 +54,7 @@ const initialFormData: FormData = {
   bookingDate: "",
   message: "",
   agreeToTerms: false,
+  gdprConsent: false,
   bookingReference: "",
 };
 
@@ -73,7 +75,6 @@ export const MAIN_STEPS: StepId[] = [
   "boiler-property-type",
   "boiler-details",
   "boiler-bedrooms",
-  "boiler-address-finder",
   "boiler-calendar",
   "boiler-payment",
 ];
@@ -83,7 +84,6 @@ const WORKING_FLOW_STEPS: StepId[] = [
   "boiler-details",
   "boiler-bedrooms",
   "boiler-large-property",
-  "boiler-address-finder",
   "boiler-calendar",
   "boiler-payment",
 ];
@@ -143,6 +143,8 @@ interface BoilerFormContextType {
   setReservationToken: (token: string | null) => void;
   reservationExpiresAt: string | null;
   setReservationExpiresAt: (expiresAt: string | null) => void;
+  partialBookingId: number | null;
+  setPartialBookingId: (id: number | null) => void;
 }
 
 const BoilerFormContext = createContext<BoilerFormContextType | null>(null);
@@ -172,6 +174,13 @@ export function BoilerFormProvider({
   const [hydrated, setHydrated] = useState(false);
   const [reservationToken, setReservationToken] = useState<string | null>(null);
   const [reservationExpiresAt, setReservationExpiresAt] = useState<string | null>(null);
+  const [partialBookingId, setPartialBookingId] = useState<number | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const persisted = loadPersistedState();
+      return persisted?.partialBookingId ?? null;
+    } catch { return null; }
+  });
 
   useEffect(() => {
     const persisted = loadPersistedState();
@@ -237,8 +246,9 @@ export function BoilerFormProvider({
       fuelType: formData.fuelType,
       formData: formData as unknown as Record<string, unknown>,
       currentStep: currentStep,
+      partialBookingId: partialBookingId ?? undefined,
     });
-  }, [formData, currentStep, hydrated]);
+  }, [formData, currentStep, hydrated, partialBookingId]);
 
   const updateFormData = useCallback((updates: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
@@ -274,6 +284,7 @@ export function BoilerFormProvider({
     setIsReturningUser(false);
     setReservationToken(null);
     setReservationExpiresAt(null);
+    setPartialBookingId(null);
     clearPersistedState();
   }, [reservationToken]);
 
@@ -300,6 +311,7 @@ export function BoilerFormProvider({
       setIsReturningUser(false);
       setReservationToken(null);
       setReservationExpiresAt(null);
+      setPartialBookingId(null);
     },
     [reservationToken]
   );
@@ -323,6 +335,8 @@ export function BoilerFormProvider({
         setReservationToken,
         reservationExpiresAt,
         setReservationExpiresAt,
+        partialBookingId,
+        setPartialBookingId,
       }}
     >
       {children}

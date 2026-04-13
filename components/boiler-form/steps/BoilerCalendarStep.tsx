@@ -23,6 +23,8 @@ export function BoilerCalendarStep() {
     reservationToken,
     setReservationToken,
     setReservationExpiresAt,
+    partialBookingId,
+    setPartialBookingId,
   } = useBoilerFormContext();
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -111,6 +113,21 @@ export function BoilerCalendarStep() {
       setReservationToken(sessionToken);
       setReservationExpiresAt(expiresAt);
       updateFormData({ bookingDate: toLocalDateString(selectedDate) });
+
+      // Silently update the existing partial record with the chosen date
+      if (partialBookingId) {
+        fetch("/api/bookings/partial", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...formData,
+            bookingDate: toLocalDateString(selectedDate),
+            serviceType: "boiler",
+            existingPartialId: partialBookingId,
+          }),
+        }).catch(() => { /* non-fatal */ });
+      }
+
       setCurrentStep("boiler-payment");
     } catch (err) {
       setError(

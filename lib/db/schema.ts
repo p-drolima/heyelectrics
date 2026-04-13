@@ -40,6 +40,9 @@ export const bookings = pgTable("bookings", {
   }).default("60.00"),
   stripePaymentIntentId: varchar("stripe_payment_intent_id", { length: 255 }),
   status: varchar("status", { length: 50 }).default("pending"),
+  submissionType: varchar("submission_type", { length: 20 }).default("full"),
+  partialSubmittedAt: timestamp("partial_submitted_at", { withTimezone: true }),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });

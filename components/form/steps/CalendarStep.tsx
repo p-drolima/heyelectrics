@@ -23,6 +23,8 @@ export function CalendarStep() {
     reservationToken,
     setReservationToken,
     setReservationExpiresAt,
+    partialBookingId,
+    setPartialBookingId,
   } = useFormContext();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     formData.bookingDate ? new Date(formData.bookingDate) : undefined
@@ -111,6 +113,20 @@ export function CalendarStep() {
       setReservationToken(sessionToken);
       setReservationExpiresAt(expiresAt);
       updateFormData({ bookingDate: toLocalDateString(selectedDate) });
+
+      // Silently update the existing partial record with the chosen date
+      if (partialBookingId) {
+        fetch("/api/bookings/partial", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...formData,
+            bookingDate: toLocalDateString(selectedDate),
+            existingPartialId: partialBookingId,
+          }),
+        }).catch(() => { /* non-fatal */ });
+      }
+
       setCurrentStep("payment");
     } catch (err) {
       setError(
