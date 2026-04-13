@@ -8,6 +8,7 @@ export interface PersistedFormState {
   formData: Record<string, unknown>;
   currentStep: string;
   expiresAt: string;
+  partialBookingId?: number | null;
 }
 
 function getDefaultState(): PersistedFormState {

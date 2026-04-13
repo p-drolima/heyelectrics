@@ -14,7 +14,7 @@ export function BedroomsStep() {
 
   const handleSelect = (count: number) => {
     updateFormData({ bedrooms: count });
-    setCurrentStep("address-finder");
+    setCurrentStep("calendar");
   };
 
   const handleMoreThanFive = () => {

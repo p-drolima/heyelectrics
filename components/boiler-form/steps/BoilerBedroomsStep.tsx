@@ -14,7 +14,7 @@ export function BoilerBedroomsStep() {
 
   const handleSelect = (count: number) => {
     updateFormData({ bedrooms: count });
-    setCurrentStep("boiler-address-finder");
+    setCurrentStep("boiler-calendar");
   };
 
   const handleMoreThanFive = () => {

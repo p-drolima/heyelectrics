@@ -10,15 +10,15 @@ import { LargePropertyStep } from "./steps/LargePropertyStep";
 import { AddressFinderStep } from "./steps/AddressFinderStep";
 import { CalendarStep } from "./steps/CalendarStep";
 import { PaymentStep } from "./steps/PaymentStep";
+import { TopResumeNotice } from "@/components/form/checkout/TopResumeNotice";
 import { cn } from "@/lib/utils";
-import { RotateCcw, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
 const RESIDENTIAL_STEPS: StepId[] = [
   "property-type",
   "residential-subtype",
   "residential-details",
   "bedrooms",
-  "address-finder",
   "calendar",
   "payment",
 ];
@@ -32,29 +32,8 @@ const stepLabels: Record<StepId, string> = {
   "large-property": "Contact",
   "address-finder": "Address",
   calendar: "Date",
-  payment: "Payment",
+  payment: "Checkout",
 };
-
-function ReturningUserBanner() {
-  const { isReturningUser, resetForm } = useFormContext();
-
-  if (!isReturningUser) return null;
-
-  return (
-    <div className="mb-6 rounded-xl bg-[#FFEA60]/20 border border-[#FFEA60]/40 px-5 py-3.5 flex items-center justify-between gap-4">
-      <p className="text-sm text-black">
-        Welcome back! You can continue where you left off.
-      </p>
-      <button
-        onClick={resetForm}
-        className="flex items-center gap-1.5 text-sm text-black hover:opacity-70 font-medium whitespace-nowrap transition-opacity cursor-pointer"
-      >
-        <RotateCcw className="h-3.5 w-3.5" />
-        Start over
-      </button>
-    </div>
-  );
-}
 
 function PropertyTypeIndicator() {
   const { formData, setCurrentStep, currentStep } = useFormContext();
@@ -94,6 +73,7 @@ function StepIndicator() {
   const isCommercial = formData.propertyType === "commercial";
   if (isCommercial) return null;
   if (currentStep === "large-property") return null;
+  if (currentStep === "payment") return null;
 
   const currentIndex = RESIDENTIAL_STEPS.indexOf(currentStep);
 
@@ -196,8 +176,9 @@ const stepComponents: Record<StepId, React.ComponentType> = {
 };
 
 export function StepWizard() {
-  const { currentStep, hydrated } = useFormContext();
+  const { currentStep, hydrated, isReturningUser, resetForm } = useFormContext();
   const StepComponent = stepComponents[currentStep];
+  const isPaymentStep = currentStep === "payment";
 
   if (!hydrated) {
     return (
@@ -209,9 +190,13 @@ export function StepWizard() {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <ReturningUserBanner />
-      <PropertyTypeIndicator />
-      <StepIndicator />
+      {!isPaymentStep && (
+        <>
+          <TopResumeNotice isReturningUser={isReturningUser} onReset={resetForm} />
+          <PropertyTypeIndicator />
+          <StepIndicator />
+        </>
+      )}
       <StepComponent />
     </div>
   );

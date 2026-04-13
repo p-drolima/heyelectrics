@@ -33,6 +33,7 @@ export interface FormData {
   bookingDate: string;
   message: string;
   agreeToTerms: boolean;
+  gdprConsent: boolean;
   bookingReference: string;
 }
 
@@ -52,6 +53,7 @@ const initialFormData: FormData = {
   bookingDate: "",
   message: "",
   agreeToTerms: false,
+  gdprConsent: false,
   bookingReference: "",
 };
 
@@ -71,7 +73,6 @@ const RESIDENTIAL_STEPS: StepId[] = [
   "residential-details",
   "bedrooms",
   "large-property",
-  "address-finder",
   "calendar",
   "payment",
 ];
@@ -105,6 +106,8 @@ interface FormContextType {
   setReservationToken: (token: string | null) => void;
   reservationExpiresAt: string | null;
   setReservationExpiresAt: (expiresAt: string | null) => void;
+  partialBookingId: number | null;
+  setPartialBookingId: (id: number | null) => void;
 }
 
 const FormContext = createContext<FormContextType | null>(null);
@@ -134,6 +137,15 @@ export function FormProvider({
   const [hydrated, setHydrated] = useState(false);
   const [reservationToken, setReservationToken] = useState<string | null>(null);
   const [reservationExpiresAt, setReservationExpiresAt] = useState<string | null>(null);
+  const [partialBookingId, setPartialBookingId] = useState<number | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const persisted = loadPersistedState();
+      return persisted?.partialBookingId ?? null;
+    } catch {
+      return null;
+    }
+  });
   const isInitialMount = useRef(true);
 
   // Hydrate from localStorage on mount
@@ -147,6 +159,8 @@ export function FormProvider({
       } as FormData;
       const persistedType = restoredData.propertyType;
       const persistedStep = persisted.currentStep as StepId;
+
+      // Restore partialBookingId handled by useState initializer above
 
       // Check if user is switching types via URL param
       if (initialPropertyType && initialPropertyType !== persistedType) {
@@ -207,8 +221,9 @@ export function FormProvider({
       propertyType: formData.propertyType,
       formData: formData as unknown as Record<string, unknown>,
       currentStep: currentStep,
+      partialBookingId: partialBookingId ?? undefined,
     });
-  }, [formData, currentStep, hydrated]);
+  }, [formData, currentStep, hydrated, partialBookingId]);
 
   const updateFormData = useCallback((updates: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
@@ -244,6 +259,7 @@ export function FormProvider({
     setIsReturningUser(false);
     setReservationToken(null);
     setReservationExpiresAt(null);
+    setPartialBookingId(null);
     clearPersistedState();
   }, [reservationToken]);
 
@@ -269,6 +285,7 @@ export function FormProvider({
     setIsReturningUser(false);
     setReservationToken(null);
     setReservationExpiresAt(null);
+    setPartialBookingId(null);
   }, [reservationToken]);
 
   return (
@@ -290,6 +307,8 @@ export function FormProvider({
         setReservationToken,
         reservationExpiresAt,
         setReservationExpiresAt,
+        partialBookingId,
+        setPartialBookingId,
       }}
     >
       {children}

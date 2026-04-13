@@ -29,7 +29,7 @@ const stepLabels: Record<StepId, string> = {
   "boiler-large-property": "Large property",
   "boiler-address-finder": "Address",
   "boiler-calendar": "Date",
-  "boiler-payment": "Payment",
+  "boiler-payment": "Checkout",
   "broken-boiler-enquiry": "Enquiry",
 };
 
@@ -94,6 +94,7 @@ function StepIndicator() {
 
   if (currentStep === "boiler-large-property") return null;
   if (currentStep === "broken-boiler-enquiry") return null;
+  if (currentStep === "boiler-payment") return null;
 
   const currentIndex = INDICATOR_STEPS.indexOf(currentStep);
 
@@ -200,6 +201,7 @@ const stepComponents: Record<StepId, ComponentType> = {
 export function BoilerStepWizard() {
   const { currentStep, hydrated } = useBoilerFormContext();
   const StepComponent = stepComponents[currentStep];
+  const isPaymentStep = currentStep === "boiler-payment";
 
   if (!hydrated) {
     return (
@@ -211,9 +213,13 @@ export function BoilerStepWizard() {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <ReturningUserBanner />
-      <FuelTypeIndicator />
-      <StepIndicator />
+      {!isPaymentStep && (
+        <>
+          <ReturningUserBanner />
+          <FuelTypeIndicator />
+          <StepIndicator />
+        </>
+      )}
       <StepComponent />
     </div>
   );

@@ -41,10 +41,10 @@ function ThankYouContent() {
           </div>
         </div>
         <h1 className="text-3xl font-bold text-black">
-          Thank You!
+          Your booking is confirmed
         </h1>
         <p className="text-gray-600">
-          We&apos;ve received your details and will be in touch soon.
+          We&apos;ve received your deposit payment and confirmed your EICR inspection. Check your email for full details.
         </p>
         {ref && (
           <div className="bg-gray-50 rounded-lg p-4">
