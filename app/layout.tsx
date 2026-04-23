@@ -7,7 +7,7 @@ const GA_ADS_ID = "AW-16776158728";
 export const metadata: Metadata = {
   title: "Hey Electrics - Nationwide EICRs | Electrical Installation Condition Reports",
   description:
-    "Professional EICR inspections for landlords and homeowners. Starting from £79. Flexible availability, nationwide service, certified electricians.",
+    "Professional EICR inspections for landlords and homeowners. Deposit from only £29.99. Flexible availability, nationwide service, certified electricians.",
 };
 
 export default function RootLayout({
