@@ -39,7 +39,7 @@ export function Hero() {
               Heating, plumbing and electrics, one phone call, fixes them all.
             </p>
             <div className="hidden lg:block">
-              <p className="text-black/60 text-sm">Starting from only £79*</p>
+              <p className="text-black/60 text-sm">Deposit today from only £29.99</p>
             </div>
           </div>
 

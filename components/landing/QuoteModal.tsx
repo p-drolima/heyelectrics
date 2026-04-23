@@ -72,7 +72,7 @@ export function QuoteModal({ isOpen, onClose }: QuoteModalProps) {
               Start Your Quote Below
             </CardTitle>
             <p className="text-sm text-muted-text mt-1">
-              Starting from only £79*
+              Deposit today from only £29.99
             </p>
           </CardHeader>
           <CardContent>
