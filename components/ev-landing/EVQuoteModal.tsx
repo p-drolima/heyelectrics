@@ -10,7 +10,8 @@ interface EVQuoteModalProps {
 }
 
 interface FormValues {
-  fullname: string;
+  firstname: string;
+  lastname: string;
   email: string;
   phone: string;
   postcode: string;
@@ -18,7 +19,8 @@ interface FormValues {
 }
 
 interface FormErrors {
-  fullname?: string;
+  firstname?: string;
+  lastname?: string;
   email?: string;
   phone?: string;
   postcode?: string;
@@ -34,7 +36,8 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
 
 export function EVQuoteModal({ isOpen, onClose }: EVQuoteModalProps) {
   const [values, setValues] = useState<FormValues>({
-    fullname: "",
+    firstname: "",
+    lastname: "",
     email: "",
     phone: "",
     postcode: "",
@@ -46,6 +49,12 @@ export function EVQuoteModal({ isOpen, onClose }: EVQuoteModalProps) {
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
+    if (!isOpen) {
+      setSubmitted(false);
+      setSubmitting(false);
+      setValues({ firstname: "", lastname: "", email: "", phone: "", postcode: "", privacy: false });
+      setErrors({});
+    }
     return () => {
       document.body.style.overflow = "";
     };
@@ -61,7 +70,8 @@ export function EVQuoteModal({ isOpen, onClose }: EVQuoteModalProps) {
 
   const validate = (): FormErrors => {
     const e: FormErrors = {};
-    if (!values.fullname.trim()) e.fullname = "This field is required.";
+    if (!values.firstname.trim()) e.firstname = "This field is required.";
+    if (!values.lastname.trim()) e.lastname = "This field is required.";
     if (!values.email.trim()) {
       e.email = "This field is required.";
     } else if (!EMAIL_REGEX.test(values.email)) {
@@ -99,8 +109,9 @@ export function EVQuoteModal({ isOpen, onClose }: EVQuoteModalProps) {
       m: "0",
       act: "sub",
       v: "2",
-      or: "c7cb27f7-5e35-98fd-ba3e-a76b2d251340",
-      fullname: values.fullname.trim(),
+      or: "293f6430-f4b4-49a0-97bc-95e7ff0febac",
+      firstname: values.firstname.trim(),
+      lastname: values.lastname.trim(),
       email: values.email.trim(),
       phone: values.phone.trim(),
       "field[12]": values.postcode.trim(),
@@ -160,14 +171,14 @@ export function EVQuoteModal({ isOpen, onClose }: EVQuoteModalProps) {
           </div>
         ) : (
           <form onSubmit={handleSubmit} noValidate>
-            {/* Full Name */}
+            {/* First Name */}
             <div className="mb-[10px]">
               <label className={LABEL_CLASS}>
-                Full Name
-                {errors.fullname ? (
+                First Name
+                {errors.firstname ? (
                   <span className="normal-case tracking-normal text-[#ef4444] font-semibold">
                     {" "}
-                    &mdash; {errors.fullname}
+                    &mdash; {errors.firstname}
                   </span>
                 ) : (
                   <span className="text-[#ef4444]"> *</span>
@@ -175,10 +186,32 @@ export function EVQuoteModal({ isOpen, onClose }: EVQuoteModalProps) {
               </label>
               <input
                 type="text"
-                placeholder="John Doe"
-                value={values.fullname}
-                onChange={handleChange("fullname")}
-                className={`${FIELD_CLASS} ${errors.fullname ? "outline-[#ef4444] bg-[#fff8f8]" : ""}`}
+                placeholder="John"
+                value={values.firstname}
+                onChange={handleChange("firstname")}
+                className={`${FIELD_CLASS} ${errors.firstname ? "outline-[#ef4444] bg-[#fff8f8]" : ""}`}
+              />
+            </div>
+
+            {/* Last Name */}
+            <div className="mb-[10px]">
+              <label className={LABEL_CLASS}>
+                Last Name
+                {errors.lastname ? (
+                  <span className="normal-case tracking-normal text-[#ef4444] font-semibold">
+                    {" "}
+                    &mdash; {errors.lastname}
+                  </span>
+                ) : (
+                  <span className="text-[#ef4444]"> *</span>
+                )}
+              </label>
+              <input
+                type="text"
+                placeholder="Doe"
+                value={values.lastname}
+                onChange={handleChange("lastname")}
+                className={`${FIELD_CLASS} ${errors.lastname ? "outline-[#ef4444] bg-[#fff8f8]" : ""}`}
               />
             </div>
 

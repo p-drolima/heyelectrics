@@ -1,4 +1,4 @@
-window.cfields = {"12":"post_code","21":"additional_information"};
+window.cfields = {"12":"post_code"};
 
 window._show_thank_you = function(id, message, trackcmp_url, email) {
 	var form = document.getElementById('_form_' + id + '_'), thank_you = form.querySelector('._form-thank-you');
@@ -366,26 +366,27 @@ window._load_script = function(url, callback, isSubmit) {
 			mutations.forEach(function (mutation) {
 				if (mutation.type !== 'attributes' || mutation.attributeName !== 'class') return;
 				var input = mutation.target;
-				var formEl = input.closest && input.closest('._form_element');
-				if (!formEl) return;
-				var label = formEl.querySelector('._form-label');
-				if (!label) return;
 
-				if (input.classList.contains('_has_error')) {
-					// Grab the error message AC already wrote into the hidden tooltip
-					var errInner = formEl.querySelector('._error-inner');
-					var msg = errInner ? errInner.textContent.trim() : 'Required';
-					// Replace the required asterisk span with the error message
-					var restored = label.dataset.baseHtml || label.innerHTML;
-					var updated = restored.replace(
-						/<span class="field-required">.*?<\/span>/,
-						'<span class="ac-inline-error"> — ' + msg + '</span>'
-					);
-					label.innerHTML = updated;
-				} else {
-					// Restore original label with asterisk
-					if (label.dataset.baseHtml) label.innerHTML = label.dataset.baseHtml;
-				}
+				// Defer so AC has time to append the ._error-inner tooltip after adding _has_error
+				setTimeout(function () {
+					var formEl = input.closest && input.closest('._form_element');
+					if (!formEl) return;
+					var label = formEl.querySelector('._form-label');
+					if (!label) return;
+
+					if (input.classList.contains('_has_error')) {
+						var errInner = formEl.querySelector('._error-inner');
+						var msg = errInner ? errInner.textContent.trim() : 'Required';
+						var restored = label.dataset.baseHtml || label.innerHTML;
+						var updated = restored.replace(
+							/<span class="field-required">.*?<\/span>/,
+							'<span class="ac-inline-error"> \u2014 ' + msg + '</span>'
+						);
+						label.innerHTML = updated;
+					} else {
+						if (label.dataset.baseHtml) label.innerHTML = label.dataset.baseHtml;
+					}
+				}, 50);
 			});
 		});
 
@@ -395,5 +396,5 @@ window._load_script = function(url, callback, isSubmit) {
 	}
 
 	// Run after AC's own IIFE has finished initialising the form
-	setTimeout(initInlineErrors, 200);
+	setTimeout(initInlineErrors, 300);
 })();
