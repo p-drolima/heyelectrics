@@ -43,11 +43,11 @@ export function BoilerHero() {
             >
               Reliable Boiler Servicing — From Just £99
             </h1>
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3 mb-8 w-fit mx-auto lg:mx-0 text-left">
               {USP_ITEMS.map((item) => (
                 <li
                   key={item}
-                  className="flex items-center gap-3 text-black text-base sm:text-lg lg:justify-start justify-center"
+                  className="flex items-center gap-3 text-black text-base sm:text-lg"
                 >
                   <span className="shrink-0 rounded-full bg-black p-0.5">
                     <Check className="h-4 w-4 text-[#FFEA60]" strokeWidth={2.5} />
