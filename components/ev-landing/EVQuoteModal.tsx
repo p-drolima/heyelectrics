@@ -1,0 +1,300 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { X } from "lucide-react";
+
+interface EVQuoteModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+interface FormValues {
+  fullname: string;
+  email: string;
+  phone: string;
+  postcode: string;
+  privacy: boolean;
+}
+
+interface FormErrors {
+  fullname?: string;
+  email?: string;
+  phone?: string;
+  postcode?: string;
+}
+
+const FIELD_CLASS =
+  "w-full h-[50px] rounded-[8px] bg-[#F4F6FA] outline outline-1 outline-[#D1D1D1] px-[14px] text-[14px] text-[#111] placeholder:text-[#C8C8C8] placeholder:text-[14px] placeholder:tracking-[0.02em] font-text focus:outline-2 focus:outline-black focus:bg-white transition-all";
+
+const LABEL_CLASS =
+  "block text-[12px] font-text font-normal uppercase tracking-[0.02em] text-black mb-[6px]";
+
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+
+export function EVQuoteModal({ isOpen, onClose }: EVQuoteModalProps) {
+  const [values, setValues] = useState<FormValues>({
+    fullname: "",
+    email: "",
+    phone: "",
+    postcode: "",
+    privacy: false,
+  });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
+  const validate = (): FormErrors => {
+    const e: FormErrors = {};
+    if (!values.fullname.trim()) e.fullname = "This field is required.";
+    if (!values.email.trim()) {
+      e.email = "This field is required.";
+    } else if (!EMAIL_REGEX.test(values.email)) {
+      e.email = "Enter a valid email address.";
+    }
+    if (!values.phone.trim()) e.phone = "This field is required.";
+    if (!values.postcode.trim()) e.postcode = "This field is required.";
+    return e;
+  };
+
+  const handleChange =
+    (field: keyof FormValues) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = field === "privacy" ? e.target.checked : e.target.value;
+      setValues((v) => ({ ...v, [field]: val }));
+      if (errors[field as keyof FormErrors]) {
+        setErrors((err) => ({ ...err, [field]: undefined }));
+      }
+    };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+    setSubmitting(true);
+
+    const params = new URLSearchParams({
+      u: "9",
+      f: "9",
+      s: "",
+      c: "0",
+      m: "0",
+      act: "sub",
+      v: "2",
+      or: "c7cb27f7-5e35-98fd-ba3e-a76b2d251340",
+      fullname: values.fullname.trim(),
+      email: values.email.trim(),
+      phone: values.phone.trim(),
+      "field[12]": values.postcode.trim(),
+      jsonp: "true",
+    });
+
+    const url = `https://gas939.activehosted.com/proc.php?${params.toString()}`;
+    const script = document.createElement("script");
+    script.src = url;
+    script.onload = () => {
+      setSubmitted(true);
+      setSubmitting(false);
+    };
+    script.onerror = () => {
+      setSubmitted(true);
+      setSubmitting(false);
+    };
+    document.head.appendChild(script);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+      <div className="relative w-full max-w-[480px] bg-white rounded-[15px] shadow-xl px-6 sm:px-[47px] pt-16 pb-[34px] mt-12">
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 rounded-full p-2 text-black hover:bg-[#F4F6FA] transition-colors cursor-pointer"
+          aria-label="Close"
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        {/* Stamp centred on top edge */}
+        <div className="absolute -top-[44px] left-1/2 -translate-x-1/2 w-[88px] h-[88px] drop-shadow-lg pointer-events-none">
+          <Image
+            src="/images/price-stamp-ev.svg"
+            alt="Full installations from £879"
+            fill
+            className="object-contain"
+          />
+        </div>
+
+        <h2 className="font-display font-bold text-xl sm:text-[32px] leading-[97%] tracking-[0em] text-black mb-[18px] text-center">
+          Start Your Quote Below
+        </h2>
+
+        {submitted ? (
+          <div className="text-center py-10">
+            <p className="text-xl font-bold font-display text-black mb-2">
+              Thank you!
+            </p>
+            <p className="text-[#848484] text-sm leading-relaxed">
+              We&rsquo;ve received your enquiry and will be in touch shortly.
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} noValidate>
+            {/* Full Name */}
+            <div className="mb-[10px]">
+              <label className={LABEL_CLASS}>
+                Full Name
+                {errors.fullname ? (
+                  <span className="normal-case tracking-normal text-[#ef4444] font-semibold">
+                    {" "}
+                    &mdash; {errors.fullname}
+                  </span>
+                ) : (
+                  <span className="text-[#ef4444]"> *</span>
+                )}
+              </label>
+              <input
+                type="text"
+                placeholder="John Doe"
+                value={values.fullname}
+                onChange={handleChange("fullname")}
+                className={`${FIELD_CLASS} ${errors.fullname ? "outline-[#ef4444] bg-[#fff8f8]" : ""}`}
+              />
+            </div>
+
+            {/* Email */}
+            <div className="mb-[10px]">
+              <label className={LABEL_CLASS}>
+                Email Address
+                {errors.email ? (
+                  <span className="normal-case tracking-normal text-[#ef4444] font-semibold">
+                    {" "}
+                    &mdash; {errors.email}
+                  </span>
+                ) : (
+                  <span className="text-[#ef4444]"> *</span>
+                )}
+              </label>
+              <input
+                type="text"
+                placeholder="youremail@domain.com"
+                value={values.email}
+                onChange={handleChange("email")}
+                className={`${FIELD_CLASS} ${errors.email ? "outline-[#ef4444] bg-[#fff8f8]" : ""}`}
+              />
+            </div>
+
+            {/* Phone */}
+            <div className="mb-[10px]">
+              <label className={LABEL_CLASS}>
+                Phone Number
+                {errors.phone ? (
+                  <span className="normal-case tracking-normal text-[#ef4444] font-semibold">
+                    {" "}
+                    &mdash; {errors.phone}
+                  </span>
+                ) : (
+                  <span className="text-[#ef4444]"> *</span>
+                )}
+              </label>
+              <input
+                type="text"
+                placeholder="+44 7400 123456"
+                value={values.phone}
+                onChange={handleChange("phone")}
+                className={`${FIELD_CLASS} ${errors.phone ? "outline-[#ef4444] bg-[#fff8f8]" : ""}`}
+              />
+            </div>
+
+            {/* Postcode */}
+            <div className="mb-[10px]">
+              <label className={LABEL_CLASS}>
+                Postcode
+                {errors.postcode ? (
+                  <span className="normal-case tracking-normal text-[#ef4444] font-semibold">
+                    {" "}
+                    &mdash; {errors.postcode}
+                  </span>
+                ) : (
+                  <span className="text-[#ef4444]"> *</span>
+                )}
+              </label>
+              <input
+                type="text"
+                placeholder="M23 1LB"
+                value={values.postcode}
+                onChange={handleChange("postcode")}
+                className={`${FIELD_CLASS} ${errors.postcode ? "outline-[#ef4444] bg-[#fff8f8]" : ""}`}
+              />
+            </div>
+
+            {/* Privacy checkbox */}
+            <div className="flex items-center gap-2.5 mb-[18px]">
+              <div className="relative shrink-0 group w-[25px] h-[25px]">
+                <input
+                  type="checkbox"
+                  id="modal_privacy_consent"
+                  checked={values.privacy}
+                  onChange={handleChange("privacy")}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                />
+                <div className="w-[25px] h-[25px] rounded-[3px] border border-[#ccc] bg-[#F4F6FA] flex items-center justify-center group-has-checked:bg-[#4eb4da] group-has-checked:border-[#4eb4da] transition-colors">
+                  <svg
+                    className="w-3 h-3 text-white opacity-0 group-has-checked:opacity-100 transition-opacity"
+                    viewBox="0 0 10 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden
+                  >
+                    <path
+                      d="M1 4L3.5 6.5L9 1"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <label
+                htmlFor="modal_privacy_consent"
+                className="text-[11px] text-[#323232] leading-snug cursor-pointer"
+              >
+                Yes, I agree with the privacy policy and terms and conditions
+              </label>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full bg-black text-white font-text font-bold text-[16px] rounded-full py-4 hover:opacity-85 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+            >
+              {submitting ? "Sending\u2026" : "Get your FREE quote"}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}

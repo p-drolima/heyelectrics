@@ -18,18 +18,28 @@ const BOILER_BULLETS = [
   "Nationwide Coverage",
 ];
 
+const EV_BULLETS = [
+  "Brand new BG Sync EV wall mounted charger",
+  "Fully certified installers and engineers",
+  "Smart home charging setup",
+  "Safe, compliant installation",
+];
+
 interface FooterProps {
   onGetQuote?: () => void;
-  serviceType?: "eicr" | "boiler";
+  serviceType?: "eicr" | "boiler" | "ev";
 }
 
 export function Footer({ onGetQuote, serviceType = "eicr" }: FooterProps) {
   const isBoiler = serviceType === "boiler";
-  const bullets = isBoiler ? BOILER_BULLETS : EICR_BULLETS;
-  const title = isBoiler
+  const isEV = serviceType === "ev";
+  const bullets = isEV ? EV_BULLETS : isBoiler ? BOILER_BULLETS : EICR_BULLETS;
+  const title = isEV
+    ? "Professional EV Charger Installation for Every Property"
+    : isBoiler
     ? "Book Your Boiler Service Today"
     : "Ensure Electrical Safety Today with Professional EICR Services";
-  const ctaText = isBoiler ? "Book Now" : "Get your quote";
+  const ctaText = isEV ? "Get a Free Quote" : isBoiler ? "Book Now" : "Get your quote";
 
   return (
     <footer>
