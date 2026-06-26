@@ -33,7 +33,7 @@ export function EVContentTrusted() {
           <div className="flex justify-center md:justify-end order-1 md:order-2">
             <div className="relative w-full max-w-[500px] aspect-4/3">
               <Image
-                src="/images/section_1.png"
+                src="/images/ev-section-1.png"
                 alt="Hey Electrics EV Charger Installation"
                 fill
                 className="object-cover rounded-[17px]"

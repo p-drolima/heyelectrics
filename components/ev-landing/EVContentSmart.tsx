@@ -26,7 +26,7 @@ export function EVContentSmart() {
           <div className="flex justify-center md:justify-start order-1 md:order-1">
             <div className="relative w-full max-w-[500px] aspect-4/3">
               <Image
-                src="/images/section_2.png"
+                src="/images/ev-section-2.png"
                 alt="Smart EV Home Charging"
                 fill
                 className="object-cover rounded-[17px]"
