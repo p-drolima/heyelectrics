@@ -212,19 +212,34 @@ export function EVHero() {
                   <input type="hidden" name="m" value="0" />
                   <input type="hidden" name="act" value="sub" />
                   <input type="hidden" name="v" value="2" />
-                  <input type="hidden" name="or" value="c7cb27f7-5e35-98fd-ba3e-a76b2d251340" />
+                  <input type="hidden" name="or" value="293f6430-f4b4-49a0-97bc-95e7ff0febac" />
 
                   <div className="_form-content flex-1 flex flex-col">
-                    <div className="_form_element _x36282118 _full_width">
-                      <label htmlFor="fullname" className="_form-label">
-                        Full Name<span className="field-required"> *</span>
+                    <div className="_form_element _x19189881 _full_width">
+                      <label htmlFor="firstname" className="_form-label">
+                        First Name<span className="field-required"> *</span>
                       </label>
                       <div className="_field-wrapper">
                         <input
                           type="text"
-                          id="fullname"
-                          name="fullname"
-                          placeholder="John Doe"
+                          id="firstname"
+                          name="firstname"
+                          placeholder="John"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="_form_element _x65936036 _full_width">
+                      <label htmlFor="lastname" className="_form-label">
+                        Last Name<span className="field-required"> *</span>
+                      </label>
+                      <div className="_field-wrapper">
+                        <input
+                          type="text"
+                          id="lastname"
+                          name="lastname"
+                          placeholder="Doe"
                           required
                         />
                       </div>
