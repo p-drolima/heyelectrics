@@ -71,14 +71,23 @@ export function Footer({ onGetQuote, serviceType = "eicr" }: FooterProps) {
             </div>
 
             <div className="flex flex-col gap-3 lg:shrink-0">
-              <Button
-                onClick={onGetQuote}
-                variant="white"
-                size="lg"
-                className="w-full lg:w-auto"
-              >
-                {ctaText}
-              </Button>
+              {isEV ? (
+                <Link
+                  href="/ev-charger/get-a-quote"
+                  className="inline-flex items-center justify-center bg-white text-black font-bold text-base rounded-full px-8 py-4 hover:bg-black hover:text-white transition-colors w-full lg:w-auto text-center"
+                >
+                  {ctaText}
+                </Link>
+              ) : (
+                <Button
+                  onClick={onGetQuote}
+                  variant="white"
+                  size="lg"
+                  className="w-full lg:w-auto"
+                >
+                  {ctaText}
+                </Button>
+              )}
               <Button
                 asChild
                 variant="outline"

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -8,11 +9,7 @@ const BULLET_POINTS = [
   "Safe, compliant installation",
 ];
 
-interface EVServicesProps {
-  onGetQuote?: () => void;
-}
-
-export function EVServices({ onGetQuote }: EVServicesProps) {
+export function EVServices() {
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-4">
       <div className="max-w-[1375px] mx-auto bg-[#4EB4DA] rounded-[17px] px-6 sm:px-10 lg:px-14 py-12">
@@ -42,8 +39,8 @@ export function EVServices({ onGetQuote }: EVServicesProps) {
           </div>
 
           <div className="flex flex-col gap-3 lg:shrink-0">
-            <button
-              onClick={onGetQuote}
+            <Link
+              href="/ev-charger/get-a-quote"
               className={cn(
                 "inline-flex items-center justify-center",
                 "bg-white text-black font-bold text-base",
@@ -53,7 +50,7 @@ export function EVServices({ onGetQuote }: EVServicesProps) {
               )}
             >
               Get a Free Quote
-            </button>
+            </Link>
             <a
               href="tel:01615660197"
               className={cn(
