@@ -5,8 +5,20 @@ import { useState } from "react";
 declare global {
   interface Window {
     dataLayer?: Record<string, unknown>[];
+    _show_thank_you?: (
+      id: string,
+      message: string,
+      trackcmp_url?: string,
+      email?: string
+    ) => void;
+    _show_error?: (id: string, message: string, html?: string) => void;
   }
 }
+
+const stripHtml = (html: string) => html.replace(/<[^>]*>/g, "").trim();
+
+const GENERIC_ERROR_MESSAGE =
+  "Something went wrong sending your enquiry. Please try again or call us on 0161 566 0197.";
 
 interface FormValues {
   firstname: string;
@@ -45,6 +57,7 @@ export function EVQuoteForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const validate = (): FormErrors => {
     const e: FormErrors = {};
@@ -78,6 +91,7 @@ export function EVQuoteForm() {
       return;
     }
     setSubmitting(true);
+    setSubmitError(null);
 
     const params = new URLSearchParams({
       u: "9",
@@ -101,12 +115,31 @@ export function EVQuoteForm() {
         ? crypto.randomUUID()
         : `ev-${Date.now()}`;
 
-    const script = document.createElement("script");
-    script.src = `https://gas939.activehosted.com/proc.php?${params.toString()}`;
-    script.onload = () => {
-      // Fire only once a lead has actually been accepted by ActiveCampaign —
-      // GTM listens for this event rather than the raw form "submit", which
-      // was firing on every click regardless of validation outcome.
+    let settled = false;
+
+    const cleanup = () => {
+      delete window._show_thank_you;
+      delete window._show_error;
+    };
+
+    const timeoutId = window.setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      setSubmitError(GENERIC_ERROR_MESSAGE);
+      setSubmitting(false);
+    }, 10000);
+
+    // ActiveCampaign's JSONP response calls these globals directly to report
+    // the real outcome — the previous implementation relied on the <script>
+    // tag's onload firing, which happens whether AC accepted or rejected the
+    // lead, so failed submissions were shown "Thank you!" and still counted
+    // as conversions.
+    window._show_thank_you = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      cleanup();
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({
         event: "ev_quote_submitted",
@@ -115,8 +148,24 @@ export function EVQuoteForm() {
       setSubmitted(true);
       setSubmitting(false);
     };
+
+    window._show_error = (_id, message) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      cleanup();
+      setSubmitError(stripHtml(message) || GENERIC_ERROR_MESSAGE);
+      setSubmitting(false);
+    };
+
+    const script = document.createElement("script");
+    script.src = `https://gas939.activehosted.com/proc.php?${params.toString()}`;
     script.onerror = () => {
-      setSubmitted(true);
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      cleanup();
+      setSubmitError(GENERIC_ERROR_MESSAGE);
       setSubmitting(false);
     };
     document.head.appendChild(script);
@@ -279,6 +328,13 @@ export function EVQuoteForm() {
               Yes, I agree with the privacy policy and terms and conditions
             </label>
           </div>
+
+          {/* Submission error */}
+          {submitError && (
+            <div className="mb-[10px] rounded-[8px] bg-[#fff8f8] outline outline-[#ef4444] px-[14px] py-3 text-[13px] leading-snug text-[#ef4444] font-text">
+              {submitError}
+            </div>
+          )}
 
           {/* Submit */}
           <button
