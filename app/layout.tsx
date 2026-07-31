@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { GoogleAdsTag } from "@/components/analytics/GoogleAdsTag";
 import "./globals.css";
-
-const GA_ADS_ID = "AW-16776158728";
 
 export const metadata: Metadata = {
   title: "Hey Electrics - Nationwide EICRs | Electrical Installation Condition Reports",
@@ -18,19 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Google tag (gtag.js) */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ADS_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_ADS_ID}');
-          `}
-        </Script>
+        {/* Google tag (gtag.js) — skipped on /ev-charger, which uses GTM instead */}
+        <GoogleAdsTag />
 
         {/* Microsoft Clarity */}
         <Script id="clarity" strategy="afterInteractive">

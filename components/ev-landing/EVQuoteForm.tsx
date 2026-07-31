@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 
+declare global {
+  interface Window {
+    dataLayer?: Record<string, unknown>[];
+  }
+}
+
 interface FormValues {
   firstname: string;
   lastname: string;
@@ -90,9 +96,22 @@ export function EVQuoteForm() {
       jsonp: "true",
     });
 
+    const transactionId =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `ev-${Date.now()}`;
+
     const script = document.createElement("script");
     script.src = `https://gas939.activehosted.com/proc.php?${params.toString()}`;
     script.onload = () => {
+      // Fire only once a lead has actually been accepted by ActiveCampaign —
+      // GTM listens for this event rather than the raw form "submit", which
+      // was firing on every click regardless of validation outcome.
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "ev_quote_submitted",
+        transaction_id: transactionId,
+      });
       setSubmitted(true);
       setSubmitting(false);
     };
