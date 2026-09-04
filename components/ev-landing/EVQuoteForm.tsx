@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { UTM_KEYS, getCookie, utmCookieName } from "@/lib/utm";
 
 declare global {
   interface Window {
@@ -16,6 +17,14 @@ declare global {
 }
 
 const stripHtml = (html: string) => html.replace(/<[^>]*>/g, "").trim();
+
+/** Maps ActiveCampaign's custom field IDs to the UTM keys they store. */
+const UTM_FIELD_IDS: Record<(typeof UTM_KEYS)[number], string> = {
+  utm_source: "field[22]",
+  utm_medium: "field[23]",
+  utm_campaign: "field[24]",
+  utm_term: "field[25]",
+};
 
 const GENERIC_ERROR_MESSAGE =
   "Something went wrong sending your enquiry. Please try again or call us on 0161 566 0197.";
@@ -101,13 +110,20 @@ export function EVQuoteForm() {
       m: "0",
       act: "sub",
       v: "2",
-      or: "293f6430-f4b4-49a0-97bc-95e7ff0febac",
+      or: "6e45f5e0-3123-4700-b939-3d2ca372451e",
       firstname: values.firstname.trim(),
       lastname: values.lastname.trim(),
       email: values.email.trim(),
       phone: values.phone.trim(),
       "field[12]": values.postcode.trim(),
       jsonp: "true",
+    });
+
+    // Attach whatever UTM params were captured on landing (see UtmCapture),
+    // so campaign attribution survives the /ev-charger -> get-a-quote hop.
+    UTM_KEYS.forEach((key) => {
+      const value = getCookie(utmCookieName(key));
+      if (value) params.set(UTM_FIELD_IDS[key], value);
     });
 
     const transactionId =

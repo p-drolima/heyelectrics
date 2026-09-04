@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { UtmCapture } from "@/components/analytics/UtmCapture";
 
 export const metadata: Metadata = {
   title: "EV Charger Installation From £879 | Hey Electrics",
@@ -14,6 +15,10 @@ export default function EVChargerLayout({
 }) {
   return (
     <>
+      {/* Capture utm_source/medium/campaign/term from the URL and persist
+          them across the /ev-charger -> /ev-charger/get-a-quote navigation */}
+      <UtmCapture />
+
       {/* Google Tag Manager */}
       <Script
         id="gtm-ev"
